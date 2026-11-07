@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مجمع سبأ روكب – المتوسطة والثانوية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
+<style>
+:root{--bg:#f4f6fc;--card:#fff;--ink:#14213d;--mute:#5a6684;--brand:#1d3f9e;--brand2:#ff9f1c;--soft:#e6ecfb;--line:#dde3f2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1226;--card:#141c38;--ink:#e8ecf8;--mute:#9aa6c9;--brand:#7da2ff;--brand2:#ffb547;--soft:#1b2750;--line:#263259}}
+:root[data-theme="dark"]{--bg:#0c1226;--card:#141c38;--ink:#e8ecf8;--mute:#9aa6c9;--brand:#7da2ff;--brand2:#ffb547;--soft:#1b2750;--line:#263259}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Tajawal',Tahoma,Arial,sans-serif;line-height:1.8}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+.wrap{max-width:1050px;margin:auto;padding:0 18px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--card);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:10px;padding-bottom:10px}
+.logo{font-weight:800;font-size:20px;color:var(--brand);display:flex;align-items:center;gap:8px;text-decoration:none}
+nav{display:flex;gap:4px;overflow-x:auto}
+nav a{color:var(--ink);text-decoration:none;padding:6px 12px;border-radius:20px;font-weight:500;white-space:nowrap;font-size:15px}
+nav a:hover{background:var(--soft);color:var(--brand)}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 15% 20%,#3a63d6 0,transparent 45%),linear-gradient(135deg,#1d3f9e,#0e1f4d);color:#fff;padding:48px 0 40px}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;background:#fff;opacity:.06}
+.hero::before{width:320px;height:320px;top:-120px;right:-80px}
+.hero::after{width:220px;height:220px;bottom:-90px;left:30%}
+.hero .wrap{position:relative;z-index:1;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.hero .txt{flex:1 1 320px}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);padding:2px 14px;border-radius:20px;font-size:14px;margin-bottom:12px}
+.hero h1{margin:0 0 8px;font-size:clamp(34px,7vw,56px);font-weight:800;line-height:1.3}
+.hero h1 em{font-style:normal;color:var(--brand2)}
+.hero p{margin:0 0 22px;max-width:480px;opacity:.92;font-size:18px}
+.hero svg{flex:0 1 380px;width:100%;max-width:380px;height:auto;margin-inline:auto;transform:translateY(-26px)}
+.btn{display:inline-block;background:var(--brand2);color:#1c1405;padding:10px 24px;border-radius:30px;font-weight:700;text-decoration:none;border:0;font-family:inherit;font-size:16px;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:26px;color:var(--brand)}
+.stat span{color:var(--mute);font-size:14px}
+section{padding:46px 0 6px}
+h2{font-size:28px;margin:0 0 6px;color:var(--brand)}
+.sub{color:var(--mute);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 6px 18px rgba(20,33,61,.06)}
+.card h3{margin:0 0 4px;font-size:18px}
+.card p{margin:0;color:var(--mute);font-size:15px}
+.ico{font-size:28px}
+.stage{margin:22px 0 10px;font-size:20px;font-weight:700;display:flex;align-items:center;gap:8px}
+.stage::after{content:"";flex:1;height:1px;background:var(--line)}
+.grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.gbtn{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;font-family:inherit;color:var(--ink);font-size:16px;font-weight:700;transition:.15s}
+.gbtn small{display:block;color:var(--mute);font-weight:400;font-size:13px}
+.gbtn:hover{border-color:var(--brand)}
+.gbtn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.gbtn.on small{color:#e0f2ee}
+.panel{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel h3{margin:0 0 12px}
+.books{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.book{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg);display:flex;flex-direction:column;gap:6px}
+.book b{font-size:16px}
+.book span{color:var(--mute);font-size:13px}
+.book a{margin-top:auto;color:var(--brand);font-weight:700;text-decoration:none;font-size:14px}
+.empty{color:var(--mute);text-align:center;padding:24px 8px;border:2px dashed var(--line);border-radius:12px}
+.news{display:flex;gap:14px;align-items:flex-start}
+.date{background:var(--soft);color:var(--brand);border-radius:10px;padding:6px 12px;font-weight:700;text-align:center;min-width:64px;font-size:14px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);font-size:15px}
+th{background:var(--soft);color:var(--brand)}
+.tw{overflow-x:auto}
+footer{margin-top:50px;background:#0e1f4d;color:#e5efec;padding:28px 0;text-align:center;font-size:14px}
+nav{min-width:0}
+.cta{background:var(--brand2);color:#1c1405;padding:7px 16px;border-radius:24px;font-weight:700;text-decoration:none;font-size:15px;white-space:nowrap}
+.quick{display:flex;gap:10px;overflow-x:auto;margin-top:18px;padding-bottom:4px}
+.quick a{flex:1 0 auto;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:8px 18px;text-decoration:none;color:var(--ink);font-weight:700;font-size:15px;white-space:nowrap;text-align:center}
+.quick a:hover{background:var(--brand);color:#fff}
+.search{width:100%;padding:12px 18px;border-radius:30px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:16px;margin-bottom:6px}
+.search:focus{outline:0;border-color:var(--brand)}
+.path{display:flex;gap:12px;overflow-x:auto;padding:22px 2px 14px}
+.step{flex:0 0 150px;position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 10px 14px;text-align:center;cursor:pointer;font-family:inherit;color:var(--ink)}
+.step i{position:absolute;top:-14px;right:50%;transform:translateX(50%);width:30px;height:30px;line-height:30px;border-radius:50%;background:var(--brand);color:#fff;font-style:normal;font-weight:800}
+.step b{display:block}.step small{color:var(--mute)}
+.step:hover{border-color:var(--brand2)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.form input,.form select{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit;font-size:16px}
+.fab{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;font-size:26px;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:12}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#top">🏫 مجمع سبأ روكب</a>
+  <nav>
+    <a href="#about">عن المدرسة</a><a href="#books">الكتب المدرسية</a><a href="#journey">رحلة الطالب</a><a href="#news">الأخبار</a><a href="#schedule">المواعيد</a><a href="#contact">تواصل معنا</a>
+  </nav>
+  <a class="cta" href="#register">📝 سجّل الآن</a>
+</div></header>
+
+<div class="hero" id="top"><div class="wrap">
+  <div class="txt">
+    <span class="tag">متوسطة وثانوية</span>
+    <h1><em>مجمع سبأ روكب</em></h1>
+    <p>نبني جيلًا متعلمًا ومبدعًا بالعلم والأخلاق، وكل كتب الصفوف بين يديك.</p>
+    <a class="btn" href="#books">📚 تصفّح الكتب المدرسية</a>
+  </div>
+  <svg viewBox="0 0 400 340" role="img" aria-label="موظف يرتب الكتب على الرف">
+    <defs><linearGradient id="fd" x1="0" y1="0" x2="0" y2="1"><stop offset=".3" stop-color="#fff"/><stop offset=".88" stop-color="#000"/></linearGradient><mask id="fm" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="340"><rect width="400" height="340" fill="url(#fd)"/></mask></defs>
+    <g mask="url(#fm)">
+    <circle cx="200" cy="170" r="150" fill="#fff" opacity=".1"/>
+    <rect x="40" y="60" width="210" height="230" rx="12" fill="#fff" opacity=".13" stroke="#fff" stroke-opacity=".4" stroke-width="2"/>
+    <g fill="#fff" opacity=".5"><rect x="40" y="130" width="210" height="6"/><rect x="40" y="200" width="210" height="6"/><rect x="40" y="270" width="210" height="6"/></g>
+    <g opacity=".9">
+      <rect x="56" y="80" width="14" height="50" fill="#ff9f1c"/><rect x="72" y="88" width="12" height="42" fill="#7fd1ff"/><rect x="86" y="76" width="16" height="54" fill="#fff"/><rect x="104" y="84" width="12" height="46" fill="#ff6b8b"/><rect x="118" y="90" width="14" height="40" fill="#7fd1ff"/><rect x="196" y="82" width="16" height="48" fill="#ff9f1c"/>
+      <rect x="56" y="152" width="16" height="48" fill="#7fd1ff"/><rect x="74" y="160" width="12" height="40" fill="#ff9f1c"/><rect x="88" y="150" width="14" height="50" fill="#fff"/><rect x="104" y="156" width="16" height="44" fill="#ff6b8b"/><rect x="122" y="162" width="12" height="38" fill="#7fd1ff"/><rect x="136" y="150" width="16" height="50" fill="#ff9f1c"/>
+      <rect x="60" y="256" width="80" height="14" fill="#ff9f1c"/><rect x="64" y="242" width="74" height="14" fill="#fff"/><rect x="58" y="228" width="78" height="14" fill="#7fd1ff"/><rect x="160" y="224" width="14" height="46" fill="#ff6b8b"/><rect x="176" y="218" width="16" height="52" fill="#fff"/><rect x="194" y="226" width="14" height="44" fill="#7fd1ff"/>
+    </g>
+    <path d="M330 38 L372 54 L330 70 L288 54Z" fill="#fff" opacity=".85"/><path d="M306 62 v14 q24 12 48 0 v-14 l-24 9z" fill="#fff" opacity=".7"/>
+    <ellipse cx="300" cy="330" rx="72" ry="6" fill="#000" opacity=".18"/>
+    <rect x="272" y="260" width="24" height="62" fill="#16255a"/><rect x="304" y="260" width="24" height="62" fill="#16255a"/>
+    <rect x="266" y="316" width="34" height="12" rx="6" fill="#0c1226"/><rect x="302" y="316" width="34" height="12" rx="6" fill="#0c1226"/>
+    <path d="M272 165 q28 -14 56 0 l8 98 h-72z" fill="#3b6cff"/>
+    <path d="M290 160 L300 205 L310 160" stroke="#ff9f1c" stroke-width="3" fill="none"/><rect x="293" y="205" width="14" height="18" rx="3" fill="#fff"/>
+    <rect x="292" y="142" width="16" height="18" fill="#e9b88e"/>
+    <circle cx="300" cy="125" r="24" fill="#f2c8a0"/>
+    <path d="M276 122 q2 -28 26 -28 q24 0 24 24 q-10 -14 -26 -12 q-14 0 -24 16z" fill="#2a2438"/>
+    <circle cx="292" cy="126" r="2.2" fill="#2a2438"/><circle cx="308" cy="126" r="2.2" fill="#2a2438"/><path d="M292 135 q8 7 16 0" stroke="#8a4b2d" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M326 172 L344 224" stroke="#3b6cff" stroke-width="16" stroke-linecap="round"/>
+    <rect x="318" y="232" width="56" height="12" rx="2" fill="#ff9f1c"/><rect x="322" y="244" width="52" height="12" rx="2" fill="#7fd1ff"/><rect x="316" y="220" width="58" height="12" rx="2" fill="#fff"/>
+    <circle cx="344" cy="222" r="9" fill="#f2c8a0"/>
+    <rect x="230" y="102" width="14" height="42" rx="2" fill="#fff" opacity=".95" transform="rotate(12 237 123)"/>
+    <path d="M276 170 L244 148" stroke="#3b6cff" stroke-width="16" stroke-linecap="round"/>
+    <circle cx="240" cy="146" r="9" fill="#f2c8a0"/>
+    </g>
+  </svg>
+</div></div>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><b>7</b><span>مراحل دراسية</span></div>
+    <div class="stat"><b>4</b><span>مراحل متوسطة</span></div>
+    <div class="stat"><b>3</b><span>مراحل ثانوية</span></div>
+    <div class="stat"><b>2</b><span>مساران علمي وأدبي</span></div>
+  </div>
+
+  <div class="quick"><a href="#books">📚 كتب صفّي</a><a href="#journey">🧭 رحلة الطالب</a><a href="#schedule">🕗 المواعيد</a><a href="#news">📰 الأخبار</a><a href="#register">📝 التسجيل</a></div>
+
+  <section id="about">
+    <h2>عن المدرسة</h2>
+    <p class="sub">مجمع سبأ روكب يجمع المرحلة المتوسطة والثانوية في بيئة تعليمية آمنة ومحفّزة.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🎯</div><h3>رسالتنا</h3><p>تقديم تعليم متميز يُنمّي المهارات والقيم ويُعدّ الطالب للمستقبل.</p></div>
+      <div class="card"><div class="ico">👨‍🏫</div><h3>كادر تعليمي</h3><p>معلمون أكفاء ومتابعة مستمرة لمستوى كل طالب.</p></div>
+      <div class="card"><div class="ico">🔬</div><h3>مسارات الثانوية</h3><p>المسار العلمي والمسار الأدبي في الصف الثاني الثانوي.</p></div>
+      <div class="card"><div class="ico">💻</div><h3>مكتبة رقمية</h3><p>جميع كتب الصفوف متاحة للتحميل من الموقع في أي وقت.</p></div>
+    </div>
+  </section>
+
+  <section id="books">
+    <h2>الكتب المدرسية</h2>
+    <p class="sub">اختر صفّك لتظهر لك كتبه، أو ابحث عن أي كتاب مباشرة.</p>
+    <input class="search" id="q" type="search" placeholder="🔍 ابحث عن كتاب، مثال: رياضيات">
+
+    <div class="stage">🏫 المرحلة المتوسطة</div>
+    <div class="grades" id="g-mid"></div>
+    <div class="stage">🎓 المرحلة الثانوية</div>
+    <div class="grades" id="g-sec"></div>
+    <div id="tracks" style="display:none"></div>
+
+    <div class="panel"><h3 id="ptitle"></h3><div id="plist"></div></div>
+  </section>
+
+  <section id="journey">
+    <h2>رحلة الطالب في المجمع</h2>
+    <p class="sub">من المتوسطة حتى الثالث الثانوي، اضغط على أي مرحلة لتصل إلى كتبها.</p>
+    <div class="path" id="path"></div>
+  </section>
+
+  <section id="news">
+    <h2>أخبار المدرسة</h2>
+    <p class="sub">آخر الإعلانات والفعاليات.</p>
+    <div class="grid">
+      <div class="card news"><div class="date">قريبًا</div><div><h3>بداية الفصل الدراسي</h3><p>سيتم نشر التفاصيل هنا.</p></div></div>
+      <div class="card news"><div class="date">قريبًا</div><div><h3>نشاط مدرسي</h3><p>أضف خبرك الأول من هنا.</p></div></div>
+    </div>
+  </section>
+
+  <section id="schedule">
+    <h2>المواعيد</h2>
+    <p class="sub">الدوام والاختبارات.</p>
+    <div class="tw"><table>
+      <tr><th>المرحلة</th><th>بداية الدوام</th><th>نهاية الدوام</th></tr>
+      <tr><td>المتوسطة</td><td>7:30 ص</td><td>12:30 م</td></tr>
+      <tr><td>الثانوية</td><td>7:30 ص</td><td>1:30 م</td></tr>
+    </table></div>
+  </section>
+
+  <section id="register">
+    <h2>سجّل الآن</h2>
+    <p class="sub">نموذج سريع، دقيقتان فقط.</p>
+    <div class="card"><div class="form"><input id="fn" placeholder="اسم الطالب"><input id="fp" type="tel" placeholder="رقم ولي الأمر"><select id="fg"></select><button class="btn" id="fs">📲 إرسال الطلب</button></div><p id="fm" class="sub" style="margin:10px 0 0"></p></div>
+  </section>
+
+  <section id="contact">
+    <h2>تواصل معنا</h2>
+    <p class="sub">يسعدنا استقبال استفساراتكم.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">📍</div><h3>العنوان</h3><p>اكتب عنوان المدرسة هنا</p></div>
+      <div class="card"><div class="ico">📞</div><h3>الهاتف</h3><p>اكتب رقم الهاتف هنا</p></div>
+      <div class="card"><div class="ico">✉️</div><h3>البريد</h3><p>اكتب البريد الإلكتروني هنا</p></div>
+    </div>
+  </section>
+</div>
+
+<a class="fab" id="fab" href="#register" aria-label="تواصل معنا">💬</a>
+<footer><div class="wrap">© 2026 مجمع سبأ روكب – جميع الحقوق محفوظة</div></footer>
+
+<script>
+/* ===== بيانات الصفوف والكتب =====
+   لإضافة كتاب: ضع {title:"الرياضيات", subject:"رياضيات", url:"رابط التحميل"} داخل books للصف،
+   أما الثاني والثالث الثانوي فداخل مسار "علمي" أو "أدبي" في tracks */
+var GRADES=[
+ {id:"g7",name:"الصف السابع",stage:"mid",books:[]},
+ {id:"g8",name:"الصف الثامن",stage:"mid",books:[]},
+ {id:"g9",name:"الصف التاسع",stage:"mid",books:[]},
+ {id:"s1",name:"الأول الثانوي",stage:"sec",books:[]},
+ {id:"s2",name:"الثاني الثانوي",stage:"sec",tracks:{"علمي":[],"أدبي":[]}},
+ {id:"s3",name:"الثالث الثانوي",stage:"sec",tracks:{"علمي":[
+  {title:"القرآن الكريم وعلومه",subject:"علوم إسلامية",url:"s3-quran.pdf"},
+  {title:"السيرة النبوية",subject:"علوم إسلامية",url:"s3-sira.pdf"},
+  {title:"القراءة",subject:"لغة عربية",url:"s3-reading.pdf"},
+  {title:"الأدب والنصوص والنقد",subject:"لغة عربية",url:"s3-adab.pdf"},
+  {title:"الرياضيات",subject:"رياضيات",url:"s3-math.pdf"},
+  {title:"الفيزياء",subject:"علوم",url:"s3-physics.pdf"},
+  {title:"الكيمياء",subject:"علوم",url:"s3-chem.pdf"},
+  {title:"علم الأحياء وعلم الأرض",subject:"علوم",url:"s3-biology.pdf"},
+  {title:"English – Pupil’s Book",subject:"اللغة الإنجليزية (الدروس)",url:"s3-eng-pupil.pdf"},
+  {title:"English – Workbook",subject:"اللغة الإنجليزية (التمارين)",url:"s3-eng-workbook.pdf"},
+  {title:"الحديث والفقه",subject:"علوم إسلامية",url:"s3-hadith.pdf"}
+ ],"أدبي":[]}}
+];
+var cur=GRADES[0].id, trk=null;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function render(){
+  ["mid","sec"].forEach(function(st){
+    var h="";
+    GRADES.filter(function(g){return g.stage===st}).forEach(function(g){
+      h+='<button class="gbtn'+(g.id===cur?' on':'')+'" data-id="'+g.id+'">'+g.name+'<small>'+(g.tracks?'علمي وأدبي':g.books.length+' كتب')+'</small></button>';
+    });
+    document.getElementById(st==="mid"?"g-mid":"g-sec").innerHTML=h;
+  });
+  var g=GRADES.filter(function(x){return x.id===cur})[0];
+  var tb=document.getElementById("tracks"), l=document.getElementById("plist"), list;
+  if(g.tracks){
+    tb.innerHTML='<div class="stage">اختر المسار</div><div class="grades">'+Object.keys(g.tracks).map(function(t){
+      return '<button class="gbtn'+(t===trk?' on':'')+'" data-t="'+t+'">'+t+'<small>'+g.tracks[t].length+' كتب</small></button>';
+    }).join("")+'</div>';
+    tb.style.display="block";
+    list=trk?g.tracks[trk]:null;
+  }else{tb.style.display="none";list=g.books}
+  document.getElementById("ptitle").textContent="كتب "+g.name+(g.tracks&&trk?" – "+trk:"");
+  if(list===null){l.innerHTML='<div class="empty">👆 اختر المسار (علمي أو أدبي) لتظهر الكتب</div>';return}
+  if(!list.length){l.innerHTML='<div class="empty">📖 ستتم إضافة هذه الكتب قريبًا</div>';return}
+  l.innerHTML='<div class="books">'+list.map(function(b){
+    return '<div class="book"><b>'+esc(b.title)+'</b><span>'+esc(b.subject||"")+'</span>'+(b.url?'<a href="'+esc(b.url)+'" download>⬇ تحميل الكتاب</a>':'')+'</div>';
+  }).join("")+'</div>';
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest(".gbtn");
+  if(!b)return;
+  if(b.getAttribute("data-t")){trk=b.getAttribute("data-t")}
+  else{cur=b.getAttribute("data-id");trk=null}
+  render();
+});
+var WA=""; /* رقم واتساب المجمع بصيغة دولية بدون + ، مثال: 967771234567 */
+function $(i){return document.getElementById(i)}
+$("path").innerHTML=GRADES.map(function(g,i){return '<button class="step" data-go="'+g.id+'"><i>'+(i+1)+'</i><b>'+g.name+'</b><small>'+(g.stage==="mid"?"متوسطة":"ثانوية")+(g.tracks?" · علمي وأدبي":"")+'</small></button>'}).join("");
+$("fg").innerHTML='<option value="">اختر الصف</option>'+GRADES.map(function(g){return '<option>'+g.name+'</option>'}).join("");
+if(WA)$("fab").href="https://wa.me/"+WA;
+document.addEventListener("click",function(e){var s=e.target.closest("[data-go]");if(s){cur=s.getAttribute("data-go");trk=null;$("q").value="";render();$("books").scrollIntoView()}});
+$("q").addEventListener("input",function(){
+  var v=this.value.trim().toLowerCase();
+  if(!v){render();return}
+  var r=[];
+  GRADES.forEach(function(g){
+    var a=g.tracks?[]:g.books.map(function(b){return [g.name,b]});
+    if(g.tracks)Object.keys(g.tracks).forEach(function(t){g.tracks[t].forEach(function(b){a.push([g.name+" – "+t,b])})});
+    a.forEach(function(x){if((x[1].title+" "+(x[1].subject||"")).toLowerCase().indexOf(v)>-1)r.push(x)});
+  });
+  $("ptitle").textContent="نتائج البحث";
+  $("plist").innerHTML=r.length?'<div class="books">'+r.map(function(x){return '<div class="book"><b>'+esc(x[1].title)+'</b><span>'+esc(x[0])+'</span>'+(x[1].url?'<a href="'+esc(x[1].url)+'" download>⬇ تحميل الكتاب</a>':'')+'</div>'}).join("")+'</div>':'<div class="empty">لا توجد نتائج مطابقة</div>';
+});
+$("fs").onclick=function(){
+  var n=$("fn").value.trim(),p=$("fp").value.trim(),g=$("fg").value,m=$("fm");
+  if(!n||!p||!g){m.textContent="فضلًا أكمل الحقول الثلاثة.";return}
+  if(WA){window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("طلب تسجيل\nالاسم: "+n+"\nالصف: "+g+"\nالهاتف: "+p),"_blank")}
+  else m.textContent="تم تجهيز النموذج، ويبدأ الإرسال بعد إضافة رقم واتساب المجمع.";
+};
+try{
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll("section .card,.stat,.step,.panel").forEach(function(el){el.classList.add("rv");io.observe(el)});
+  document.querySelectorAll(".stat b").forEach(function(b){var n=+b.textContent;if(!n)return;var k=0,t=setInterval(function(){k++;b.textContent=k;if(k>=n)clearInterval(t)},130)});
+}catch(err){}
+render();
+</script>
+</body>
+</html>
