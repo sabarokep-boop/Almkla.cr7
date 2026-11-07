@@ -125,6 +125,64 @@ tr.past td{opacity:.45}
 tr.today td{background:var(--soft);font-weight:700;color:var(--brand)}
 #tracks .gbtn{animation:pop .35s backwards}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#splash{display:none}}
+/* ===== الجوال ===== */
+@media (max-width:600px){
+ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 96px)}
+ body{font-size:15px;line-height:1.7}
+ .wrap{padding:0 14px}
+ header .wrap{flex-wrap:wrap;gap:4px 10px;padding-top:8px;padding-bottom:6px}
+ .logo{font-size:17px;order:1}
+ .cta{order:2;padding:6px 12px;font-size:13px}
+ nav{order:3;width:100%;gap:2px}
+ nav a{padding:4px 10px;font-size:13px}
+ .hero{padding:24px 0 20px}
+ .hero .wrap{gap:8px;text-align:center;justify-content:center}
+ .hero .txt{flex-basis:100%}
+ .hero .tag{font-size:12px;padding:1px 10px;margin-bottom:6px}
+ .hero h1{font-size:28px;margin-bottom:6px}
+ .hero p{font-size:14px;margin:0 auto 12px}
+ .hero .btn{font-size:14px;padding:8px 18px}
+ .hero svg{max-width:190px;transform:translateY(-6px)}
+ .stats{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}
+ .stat{padding:8px;border-radius:12px}
+ .stat b{font-size:20px}
+ .stat span{font-size:12px}
+ .quick{margin-top:12px;gap:8px}
+ .quick a{padding:6px 12px;font-size:13px}
+ section{padding:28px 0 4px}
+ h2{font-size:22px}
+ .sub{font-size:14px;margin-bottom:14px}
+ .grid{grid-template-columns:1fr 1fr;gap:10px}
+ #news .grid,#contact .grid{grid-template-columns:1fr}
+ .card{padding:12px;border-radius:14px}
+ .card h3{font-size:15px}
+ .card p{font-size:13px;line-height:1.6}
+ .ico{font-size:22px}
+ .news{gap:10px}
+ .date{min-width:58px;padding:4px 8px;font-size:12px}
+ .stage{font-size:17px;margin:16px 0 8px}
+ .grades{grid-template-columns:repeat(2,1fr);gap:8px}
+ .gbtn{padding:10px 6px;font-size:14px;border-radius:12px}
+ .gbtn small{font-size:11px}
+ .search{padding:9px 14px;font-size:15px}
+ .panel{padding:12px;border-radius:14px}
+ .panel h3{font-size:16px}
+ .books{grid-template-columns:1fr 1fr;gap:8px}
+ .book{padding:10px;border-radius:10px}
+ .book b{font-size:14px;line-height:1.5}
+ .book span{font-size:12px}
+ .book a{font-size:13px}
+ .step{flex-basis:118px;padding:22px 8px 10px}
+ .step b{font-size:14px}
+ .step small{font-size:12px}
+ th,td{padding:8px;font-size:13px}
+ .form input,.form select{padding:10px 12px;font-size:15px}
+ .btn{font-size:15px;padding:9px 20px}
+ .fab{width:46px;height:46px;font-size:22px;left:12px}
+ footer{padding:20px 0;font-size:12px}
+ #splash .sp-i{font-size:48px}
+ #splash b{font-size:20px}
+}
 </style>
 </head>
 <body>
