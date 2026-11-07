@@ -181,7 +181,7 @@ nav{min-width:0}
     <h2>أخبار المدرسة</h2>
     <p class="sub">آخر الإعلانات والفعاليات.</p>
     <div class="grid">
-      <div class="card news"><div class="date">قريبًا</div><div><h3>بداية الفصل الدراسي</h3><p>سيتم نشر التفاصيل هنا.</p></div></div>
+      <div class="card news"><div class="date">15 نوفمبر</div><div><h3>بداية الاختبارات</h3><p>تبدأ الاختبارات بتاريخ 15 نوفمبر، ونتمنى لجميع الطلاب التوفيق.</p></div></div>
       <div class="card news"><div class="date">قريبًا</div><div><h3>نشاط مدرسي</h3><p>أضف خبرك الأول من هنا.</p></div></div>
     </div>
   </section>
@@ -191,8 +191,8 @@ nav{min-width:0}
     <p class="sub">الدوام والاختبارات.</p>
     <div class="tw"><table>
       <tr><th>المرحلة</th><th>بداية الدوام</th><th>نهاية الدوام</th></tr>
-      <tr><td>المتوسطة</td><td>7:30 ص</td><td>12:30 م</td></tr>
-      <tr><td>الثانوية</td><td>7:30 ص</td><td>1:30 م</td></tr>
+      <tr><td>المتوسطة</td><td>7:45 ص</td><td>12:30 م</td></tr>
+      <tr><td>الثانوية</td><td>7:45 ص</td><td>1:00 م</td></tr>
     </table></div>
   </section>
 
@@ -206,15 +206,15 @@ nav{min-width:0}
     <h2>تواصل معنا</h2>
     <p class="sub">يسعدنا استقبال استفساراتكم.</p>
     <div class="grid">
-      <div class="card"><div class="ico">📍</div><h3>العنوان</h3><p>اكتب عنوان المدرسة هنا</p></div>
-      <div class="card"><div class="ico">📞</div><h3>الهاتف</h3><p>اكتب رقم الهاتف هنا</p></div>
+      <div class="card"><div class="ico">📍</div><h3>العنوان</h3><p>روكب</p></div>
+      <div class="card"><div class="ico">📞</div><h3>الهاتف</h3><p><a href="tel:+967777289691" style="color:inherit;direction:ltr;unicode-bidi:embed">+967 777 289 691</a></p></div>
       <div class="card"><div class="ico">✉️</div><h3>البريد</h3><p>اكتب البريد الإلكتروني هنا</p></div>
     </div>
   </section>
 </div>
 
 <a class="fab" id="fab" href="#register" aria-label="تواصل معنا">💬</a>
-<footer><div class="wrap">© 2026 مجمع سبأ روكب – جميع الحقوق محفوظة</div></footer>
+<footer><div class="wrap">© 2026 مجمع سبأ روكب<br>حقوق الطبع محفوظة: محمد سرور بامزعب</div></footer>
 
 <script>
 /* ===== بيانات الصفوف والكتب =====
@@ -273,7 +273,7 @@ document.addEventListener("click",function(e){
   else{cur=b.getAttribute("data-id");trk=null}
   render();
 });
-var WA=""; /* رقم واتساب المجمع بصيغة دولية بدون + ، مثال: 967771234567 */
+var WA="967777289691"; /* رقم واتساب المجمع بصيغة دولية بدون + ، مثال: 967771234567 */
 function $(i){return document.getElementById(i)}
 $("path").innerHTML=GRADES.map(function(g,i){return '<button class="step" data-go="'+g.id+'"><i>'+(i+1)+'</i><b>'+g.name+'</b><small>'+(g.stage==="mid"?"متوسطة":"ثانوية")+(g.tracks?" · علمي وأدبي":"")+'</small></button>'}).join("");
 $("fg").innerHTML='<option value="">اختر الصف</option>'+GRADES.map(function(g){return '<option>'+g.name+'</option>'}).join("");
