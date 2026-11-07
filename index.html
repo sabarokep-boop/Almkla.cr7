@@ -87,13 +87,51 @@ nav{min-width:0}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+/* ===== تأثيرات ===== */
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.92) translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes spOut{to{opacity:0;visibility:hidden}}
+@keyframes ld{from{transform:translateX(250%)}to{transform:translateX(-100%)}}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(255,159,28,.55)}100%{box-shadow:0 0 0 16px rgba(255,159,28,0)}}
+@keyframes glow2{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}100%{box-shadow:0 0 0 18px rgba(37,211,102,0)}}
+@keyframes rip{to{transform:scale(2.6);opacity:0}}
+#splash{position:fixed;inset:0;z-index:99;background:linear-gradient(135deg,#1d3f9e,#0e1f4d);display:grid;place-items:center;color:#fff;text-align:center;animation:spOut .6s 1.5s forwards}
+#splash .sp-i{font-size:64px;animation:pop .8s backwards}
+#splash b{display:block;font-size:26px;margin-top:6px;animation:up .8s .2s backwards}
+#splash i{display:block;width:120px;height:4px;margin:14px auto 0;border-radius:4px;background:rgba(255,255,255,.25);position:relative;overflow:hidden}
+#splash i::after{content:"";position:absolute;top:0;bottom:0;right:0;width:40%;background:var(--brand2);border-radius:4px;animation:ld 1.2s ease-in-out infinite}
+.hero .tag{animation:up .7s 1.2s backwards}
+.hero h1{animation:up .7s 1.3s backwards}
+.hero p{animation:up .7s 1.4s backwards}
+.hero .btn{animation:up .7s 1.5s backwards,glow 2.2s 2.6s infinite}
+.hero svg{animation:fade .9s 1.4s backwards}
+.fab{animation:glow2 2.5s 2s infinite}
+#bar{position:fixed;top:0;right:0;height:3px;width:0;background:var(--brand2);z-index:100;transition:width .1s}
+header{transition:box-shadow .3s}
+header.sc{box-shadow:0 6px 20px rgba(0,0,0,.14)}
+.btn,.cta,.gbtn,.quick a,.stat,.card,.book{position:relative;overflow:hidden}
+.btn,.cta,.quick a,.fab,.step{transition:transform .15s,background .2s,box-shadow .2s,border-color .2s}
+.btn:active,.cta:active,.gbtn:active,.quick a:active,.step:active,.fab:active{transform:scale(.94)}
+.rip{position:absolute;border-radius:50%;background:currentColor;opacity:.28;transform:scale(0);animation:rip .65s ease-out;pointer-events:none}
+.rv.rv2{transform:translateX(-26px) scale(.97)}
+.rv.in{opacity:1;transform:none}
+.card.rv.in:hover,.stat.rv.in:hover,.step.rv.in:hover{transform:translateY(-5px);box-shadow:0 14px 28px rgba(20,33,61,.14)}
+.book{animation:pop .45s backwards;transition:transform .2s,box-shadow .2s}
+.book:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(20,33,61,.12)}
+.empty{animation:pop .4s backwards}
+tr.past td{opacity:.45}
+tr.today td{background:var(--soft);font-weight:700;color:var(--brand)}
+#tracks .gbtn{animation:pop .35s backwards}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#splash{display:none}}
 </style>
 </head>
 <body>
+<div id="splash"><div class="sp"><div class="sp-i">🏫</div><b>مجمع سبأ روكب</b><i></i></div></div>
 <header><div class="wrap">
   <a class="logo" href="#top">🏫 مجمع سبأ روكب</a>
   <nav>
-    <a href="#about">عن المدرسة</a><a href="#books">الكتب المدرسية</a><a href="#journey">رحلة الطالب</a><a href="#news">الأخبار</a><a href="#schedule">المواعيد</a><a href="#contact">تواصل معنا</a>
+    <a href="#about">عن المدرسة</a><a href="#books">الكتب المدرسية</a><a href="#journey">رحلة الطالب</a><a href="#news">الأخبار</a><a href="#schedule">المواعيد</a><a href="#exams">الاختبارات</a><a href="#contact">تواصل معنا</a>
   </nav>
   <a class="cta" href="#register">📝 سجّل الآن</a>
 </div></header>
@@ -144,7 +182,7 @@ nav{min-width:0}
     <div class="stat"><b>2</b><span>مساران علمي وأدبي</span></div>
   </div>
 
-  <div class="quick"><a href="#books">📚 كتب صفّي</a><a href="#journey">🧭 رحلة الطالب</a><a href="#schedule">🕗 المواعيد</a><a href="#news">📰 الأخبار</a><a href="#register">📝 التسجيل</a></div>
+  <div class="quick"><a href="#books">📚 كتب صفّي</a><a href="#journey">🧭 رحلة الطالب</a><a href="#schedule">🕗 المواعيد</a><a href="#exams">🗓 الاختبارات</a><a href="#news">📰 الأخبار</a><a href="#register">📝 التسجيل</a></div>
 
   <section id="about">
     <h2>عن المدرسة</h2>
@@ -182,7 +220,7 @@ nav{min-width:0}
     <p class="sub">آخر الإعلانات والفعاليات.</p>
     <div class="grid">
       <div class="card news"><div class="date">15 نوفمبر</div><div><h3>بداية الاختبارات</h3><p>تبدأ الاختبارات بتاريخ 15 نوفمبر، ونتمنى لجميع الطلاب التوفيق.</p></div></div>
-      <div class="card news"><div class="date">قريبًا</div><div><h3>نشاط مدرسي</h3><p>أضف خبرك الأول من هنا.</p></div></div>
+      <div class="card news"><div class="date">23 نوفمبر</div><div><h3>مشروع الصف الثالث الثانوي</h3><p>ينتهي مشروع الصف الثالث الثانوي بتاريخ 23 نوفمبر.</p></div></div>
     </div>
   </section>
 
@@ -193,6 +231,23 @@ nav{min-width:0}
       <tr><th>المرحلة</th><th>بداية الدوام</th><th>نهاية الدوام</th></tr>
       <tr><td>المتوسطة</td><td>7:45 ص</td><td>12:30 م</td></tr>
       <tr><td>الثانوية</td><td>7:45 ص</td><td>1:00 م</td></tr>
+    </table></div>
+  </section>
+
+  <section id="exams">
+    <h2>جدول الاختبارات</h2>
+    <p class="sub">تبدأ الاختبارات يوم الأحد 15 نوفمبر.</p>
+    <div class="tw"><table>
+      <tr><th>اليوم</th><th>التاريخ</th><th>المادة</th></tr>
+      <tr data-d="2026-11-15"><td>الأحد</td><td>15 نوفمبر</td><td>القرآن الكريم</td></tr>
+      <tr data-d="2026-11-16"><td>الاثنين</td><td>16 نوفمبر</td><td>العلوم الإسلامية</td></tr>
+      <tr data-d="2026-11-17"><td>الثلاثاء</td><td>17 نوفمبر</td><td>اللغة العربية</td></tr>
+      <tr data-d="2026-11-18"><td>الأربعاء</td><td>18 نوفمبر</td><td>اللغة الإنجليزية</td></tr>
+      <tr data-d="2026-11-19"><td>الخميس</td><td>19 نوفمبر</td><td>الأحياء</td></tr>
+      <tr data-d="2026-11-22"><td>الأحد</td><td>22 نوفمبر</td><td>الرياضيات</td></tr>
+      <tr data-d="2026-11-23"><td>الاثنين</td><td>23 نوفمبر</td><td>الكيمياء</td></tr>
+      <tr data-d="2026-11-24"><td>الثلاثاء</td><td>24 نوفمبر</td><td>الفيزياء</td></tr>
+      <tr data-d="2026-11-25"><td>الأربعاء</td><td>25 نوفمبر</td><td>الحاسوب</td></tr>
     </table></div>
   </section>
 
@@ -302,6 +357,29 @@ try{
   document.querySelectorAll("section .card,.stat,.step,.panel").forEach(function(el){el.classList.add("rv");io.observe(el)});
   document.querySelectorAll(".stat b").forEach(function(b){var n=+b.textContent;if(!n)return;var k=0,t=setInterval(function(){k++;b.textContent=k;if(k>=n)clearInterval(t)},130)});
 }catch(err){}
+/* تفاعلات */
+document.querySelectorAll(".rv").forEach(function(el){
+  var i=[].indexOf.call(el.parentNode.children,el);
+  el.style.transitionDelay=Math.min(i,5)*90+"ms";
+  if(i%2)el.classList.add("rv2");
+  el.addEventListener("transitionend",function h(e){if(e.propertyName==="opacity"){el.style.transitionDelay="0ms";el.removeEventListener("transitionend",h)}});
+});
+document.addEventListener("pointerdown",function(e){
+  var t=e.target.closest(".btn,.cta,.gbtn,.quick a,.stat,.card,.book");
+  if(!t)return;
+  var r=t.getBoundingClientRect(),d=Math.max(r.width,r.height),s=document.createElement("span");
+  s.className="rip";
+  s.style.cssText="width:"+d+"px;height:"+d+"px;left:"+(e.clientX-r.left-d/2)+"px;top:"+(e.clientY-r.top-d/2)+"px";
+  t.appendChild(s);setTimeout(function(){s.remove()},700);
+});
+new MutationObserver(function(){
+  document.querySelectorAll("#plist .book").forEach(function(b,i){b.style.animationDelay=Math.min(i,10)*60+"ms"});
+}).observe($("plist"),{childList:true});
+var bar=document.createElement("div");bar.id="bar";document.body.appendChild(bar);
+function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10)}
+addEventListener("scroll",onS,{passive:true});onS();
+(function(){var d=new Date(),t=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  document.querySelectorAll("#exams tr[data-d]").forEach(function(r){var x=r.getAttribute("data-d");if(x<t)r.classList.add("past");else if(x===t)r.classList.add("today")});})();
 render();
 </script>
 </body>
