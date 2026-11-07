@@ -120,6 +120,7 @@ header.sc{box-shadow:0 6px 20px rgba(0,0,0,.14)}
 .book{animation:pop .45s backwards;transition:transform .2s,box-shadow .2s}
 .book:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(20,33,61,.12)}
 .empty{animation:pop .4s backwards}
+#ex-t .gbtn{animation:pop .35s backwards}
 tr.past td{opacity:.45}
 tr.today td{background:var(--soft);font-weight:700;color:var(--brand)}
 #tracks .gbtn{animation:pop .35s backwards}
@@ -236,19 +237,10 @@ tr.today td{background:var(--soft);font-weight:700;color:var(--brand)}
 
   <section id="exams">
     <h2>جدول الاختبارات</h2>
-    <p class="sub">تبدأ الاختبارات يوم الأحد 15 نوفمبر.</p>
-    <div class="tw"><table>
-      <tr><th>اليوم</th><th>التاريخ</th><th>المادة</th></tr>
-      <tr data-d="2026-11-15"><td>الأحد</td><td>15 نوفمبر</td><td>القرآن الكريم</td></tr>
-      <tr data-d="2026-11-16"><td>الاثنين</td><td>16 نوفمبر</td><td>العلوم الإسلامية</td></tr>
-      <tr data-d="2026-11-17"><td>الثلاثاء</td><td>17 نوفمبر</td><td>اللغة العربية</td></tr>
-      <tr data-d="2026-11-18"><td>الأربعاء</td><td>18 نوفمبر</td><td>اللغة الإنجليزية</td></tr>
-      <tr data-d="2026-11-19"><td>الخميس</td><td>19 نوفمبر</td><td>الأحياء</td></tr>
-      <tr data-d="2026-11-22"><td>الأحد</td><td>22 نوفمبر</td><td>الرياضيات</td></tr>
-      <tr data-d="2026-11-23"><td>الاثنين</td><td>23 نوفمبر</td><td>الكيمياء</td></tr>
-      <tr data-d="2026-11-24"><td>الثلاثاء</td><td>24 نوفمبر</td><td>الفيزياء</td></tr>
-      <tr data-d="2026-11-25"><td>الأربعاء</td><td>25 نوفمبر</td><td>الحاسوب</td></tr>
-    </table></div>
+    <p class="sub">اختر صفّك لتظهر لك جداول الاختبارات.</p>
+    <div class="grades" id="ex-g"></div>
+    <div id="ex-t" style="display:none"></div>
+    <div class="panel"><h3 id="ex-title"></h3><div id="ex-list"></div></div>
   </section>
 
   <section id="register">
@@ -322,7 +314,7 @@ function render(){
   }).join("")+'</div>';
 }
 document.addEventListener("click",function(e){
-  var b=e.target.closest(".gbtn");
+  var b=e.target.closest("#books .gbtn");
   if(!b)return;
   if(b.getAttribute("data-t")){trk=b.getAttribute("data-t")}
   else{cur=b.getAttribute("data-id");trk=null}
@@ -378,6 +370,46 @@ new MutationObserver(function(){
 var bar=document.createElement("div");bar.id="bar";document.body.appendChild(bar);
 function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10)}
 addEventListener("scroll",onS,{passive:true});onS();
+/* ===== جداول الاختبارات =====
+   لإضافة جدول: ضع صفوفه بالشكل ["2026-11-15","الأحد","15 نوفمبر","المادة"] داخل rows أو داخل المسار المناسب */
+var EX=[
+ {id:"e1",name:"أول ثانوي",rows:[]},
+ {id:"e2",name:"ثاني ثانوي",tracks:{"علمي":[],"أدبي":[]}},
+ {id:"e3",name:"ثالث ثانوي",tracks:{"علمي":[
+   ["2026-11-15","الأحد","15 نوفمبر","القرآن الكريم"],
+   ["2026-11-16","الاثنين","16 نوفمبر","العلوم الإسلامية"],
+   ["2026-11-17","الثلاثاء","17 نوفمبر","اللغة العربية"],
+   ["2026-11-18","الأربعاء","18 نوفمبر","اللغة الإنجليزية"],
+   ["2026-11-19","الخميس","19 نوفمبر","الأحياء"],
+   ["2026-11-22","الأحد","22 نوفمبر","الرياضيات"],
+   ["2026-11-23","الاثنين","23 نوفمبر","الكيمياء"],
+   ["2026-11-24","الثلاثاء","24 نوفمبر","الفيزياء"],
+   ["2026-11-25","الأربعاء","25 نوفمبر","الحاسوب"]
+ ],"أدبي":[]}}
+];
+var exCur=null,exTrk=null;
+function exRender(){
+  $("ex-g").innerHTML=EX.map(function(g){return '<button class="gbtn'+(g.id===exCur?' on':'')+'" data-ex="'+g.id+'">اختبارات '+g.name+'<small>'+(g.tracks?'علمي وأدبي':'جدول واحد')+'</small></button>'}).join("");
+  var g=EX.filter(function(x){return x.id===exCur})[0],tb=$("ex-t"),l=$("ex-list"),rows=null;
+  if(!g){tb.style.display="none";$("ex-title").textContent="جدول الاختبارات";l.innerHTML='<div class="empty">👆 اختر الصف لتظهر لك جداول الاختبارات</div>';return}
+  if(g.tracks){
+    tb.innerHTML='<div class="stage">اختر المسار</div><div class="grades">'+Object.keys(g.tracks).map(function(t){return '<button class="gbtn'+(t===exTrk?' on':'')+'" data-et="'+t+'">'+t+'</button>'}).join("")+'</div>';
+    tb.style.display="block";rows=exTrk?g.tracks[exTrk]:null;
+  }else{tb.style.display="none";rows=g.rows}
+  $("ex-title").textContent="اختبارات "+g.name+(g.tracks&&exTrk?" – "+exTrk:"");
+  if(rows===null){l.innerHTML='<div class="empty">👆 اختر المسار (علمي أو أدبي) ليظهر الجدول</div>';return}
+  if(!rows.length){l.innerHTML='<div class="empty">🗓 سيُنشر جدول الاختبارات قريبًا</div>';return}
+  var d=new Date(),t=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  l.innerHTML='<div class="tw"><table><tr><th>اليوم</th><th>التاريخ</th><th>المادة</th></tr>'+rows.map(function(r){return '<tr class="'+(r[0]<t?'past':r[0]===t?'today':'')+'"><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>'}).join("")+'</table></div>';
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("#exams .gbtn");
+  if(!b)return;
+  if(b.getAttribute("data-et")){exTrk=b.getAttribute("data-et")}
+  else{exCur=b.getAttribute("data-ex");exTrk=null}
+  exRender();
+});
+exRender();
 (function(){var d=new Date(),t=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
   document.querySelectorAll("#exams tr[data-d]").forEach(function(r){var x=r.getAttribute("data-d");if(x<t)r.classList.add("past");else if(x===t)r.classList.add("today")});})();
 render();
