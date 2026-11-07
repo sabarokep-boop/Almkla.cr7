@@ -183,6 +183,11 @@ tr.today td{background:var(--soft);font-weight:700;color:var(--brand)}
  #splash .sp-i{font-size:48px}
  #splash b{font-size:20px}
 }
+/* ===== شريط شفاف يختفي مع النزول ===== */
+header{background:rgba(255,255,255,.7);background:color-mix(in srgb,var(--card) 60%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid rgba(128,128,128,.18);transition:transform .35s ease,box-shadow .3s}
+body::before{background:rgba(255,255,255,.7);background:color-mix(in srgb,var(--card) 60%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:transform .35s ease}
+body.hid header{transform:translateY(-130%);box-shadow:none}
+body.hid::before{transform:translateY(-100%)}
 </style>
 </head>
 <body>
@@ -426,7 +431,8 @@ new MutationObserver(function(){
   document.querySelectorAll("#plist .book").forEach(function(b,i){b.style.animationDelay=Math.min(i,10)*60+"ms"});
 }).observe($("plist"),{childList:true});
 var bar=document.createElement("div");bar.id="bar";document.body.appendChild(bar);
-function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10)}
+var lastY=0;
+function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10);var y=h.scrollTop;if(y>90&&y>lastY+4)document.body.classList.add("hid");else if(y<lastY-4||y<=90)document.body.classList.remove("hid");lastY=y}
 addEventListener("scroll",onS,{passive:true});onS();
 /* ===== جداول الاختبارات =====
    لإضافة جدول: ضع صفوفه بالشكل ["2026-11-15","الأحد","15 نوفمبر","المادة"] داخل rows أو داخل المسار المناسب */
