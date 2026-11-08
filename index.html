@@ -188,9 +188,18 @@ header{background:rgba(255,255,255,.7);background:color-mix(in srgb,var(--card) 
 body::before{background:rgba(255,255,255,.7);background:color-mix(in srgb,var(--card) 60%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:transform .35s ease}
 body.hid header{transform:translateY(-130%);box-shadow:none}
 body.hid::before{transform:translateY(-100%)}
+/* انتقال ضبابي ناعم */
+@keyframes blurIn{from{opacity:0;filter:blur(10px);transform:translateY(12px)}to{opacity:1;filter:blur(0);transform:none}}
+.blurin{animation:blurIn .7s ease both}
+body.moving .hero,body.moving section,body.moving .stats,body.moving .quick,body.moving footer{filter:url(#mb)}
+/* ===== سلاسة أثناء الحركة: نوقف الأشياء الثقيلة مؤقتًا ===== */
+html.mv header,html.mv body::before{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.92);background:color-mix(in srgb,var(--card) 92%,transparent)}
+html.mv .rv{transition:none!important}
+html.mv .fab,html.mv .hero .btn{animation-play-state:paused}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="mb" filterUnits="objectBoundingBox" x="0" y="-8%" width="100%" height="116%" color-interpolation-filters="sRGB"><feGaussianBlur id="mbg" stdDeviation="0 0"/></filter></svg>
 <div id="splash"><div class="sp"><div class="sp-i">🏫</div><b>مجمع سبأ روكب</b><i></i></div></div>
 <header><div class="wrap">
   <a class="logo" href="#top">🏫 مجمع سبأ روكب</a>
@@ -309,7 +318,7 @@ body.hid::before{transform:translateY(-100%)}
   <section id="register">
     <h2>سجّل الآن</h2>
     <p class="sub">نموذج سريع، دقيقتان فقط.</p>
-    <div class="card"><div class="form"><input id="fn" placeholder="اسم الطالب"><input id="fp" type="tel" placeholder="رقم ولي الأمر"><select id="fg"></select><button class="btn" id="fs">📲 إرسال الطلب</button></div><p id="fm" class="sub" style="margin:10px 0 0"></p></div>
+    <div class="card"><div class="form"><input id="fn" placeholder="اسم الطالب" autocomplete="name" maxlength="60"><input id="fp" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" placeholder="رقم ولي الأمر (أرقام فقط)"><select id="fg"></select><button class="btn" id="fs">📲 إرسال الطلب</button></div><p id="fm" class="sub" style="margin:10px 0 0"></p></div>
   </section>
 
   <section id="contact">
@@ -388,7 +397,9 @@ function $(i){return document.getElementById(i)}
 $("path").innerHTML=GRADES.map(function(g,i){return '<button class="step" data-go="'+g.id+'"><i>'+(i+1)+'</i><b>'+g.name+'</b><small>'+(g.stage==="mid"?"متوسطة":"ثانوية")+(g.tracks?" · علمي وأدبي":"")+'</small></button>'}).join("");
 $("fg").innerHTML='<option value="">اختر الصف</option>'+GRADES.map(function(g){return '<option>'+g.name+'</option>'}).join("");
 if(WA)$("fab").href="https://wa.me/"+WA;
-document.addEventListener("click",function(e){var s=e.target.closest("[data-go]");if(s){cur=s.getAttribute("data-go");trk=null;$("q").value="";render();$("books").scrollIntoView()}});
+document.addEventListener("click",function(e){var s=e.target.closest("[data-go]");if(s){cur=s.getAttribute("data-go");trk=null;$("q").value="";render();
+    document.querySelectorAll("#books .grades,#books .panel,#tracks").forEach(function(x){x.classList.remove("blurin");void x.offsetWidth;x.classList.add("blurin")});
+    smoothTo($("books"))}});
 $("q").addEventListener("input",function(){
   var v=this.value.trim().toLowerCase();
   if(!v){render();return}
@@ -401,9 +412,12 @@ $("q").addEventListener("input",function(){
   $("ptitle").textContent="نتائج البحث";
   $("plist").innerHTML=r.length?'<div class="books">'+r.map(function(x){return '<div class="book"><b>'+esc(x[1].title)+'</b><span>'+esc(x[0])+'</span>'+(x[1].url?'<a href="'+esc(x[1].url)+'" download>⬇ تحميل الكتاب</a>':'')+'</div>'}).join("")+'</div>':'<div class="empty">لا توجد نتائج مطابقة</div>';
 });
+$("fn").addEventListener("input",function(){var v=this.value.replace(/[0-9٠-٩۰-۹]/g,"");if(v!==this.value)this.value=v});
+$("fp").addEventListener("input",function(){var v=this.value.replace(/[٠-٩]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[۰-۹]/g,function(d){return d.charCodeAt(0)-1776}).replace(/\D/g,"");if(v!==this.value)this.value=v});
 $("fs").onclick=function(){
   var n=$("fn").value.trim(),p=$("fp").value.trim(),g=$("fg").value,m=$("fm");
   if(!n||!p||!g){m.textContent="فضلًا أكمل الحقول الثلاثة.";return}
+  if(p.length<8){m.textContent="فضلًا اكتب رقم الهاتف كاملًا (أرقام فقط).";return}
   if(WA){window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("طلب تسجيل\nالاسم: "+n+"\nالصف: "+g+"\nالهاتف: "+p),"_blank")}
   else m.textContent="تم تجهيز النموذج، ويبدأ الإرسال بعد إضافة رقم واتساب المجمع.";
 };
@@ -431,6 +445,45 @@ new MutationObserver(function(){
   document.querySelectorAll("#plist .book").forEach(function(b,i){b.style.animationDelay=Math.min(i,10)*60+"ms"});
 }).observe($("plist"),{childList:true});
 var bar=document.createElement("div");bar.id="bar";document.body.appendChild(bar);
+var lowFx=false,smoothTok=0;
+["wheel","touchstart","keydown"].forEach(function(ev){addEventListener(ev,function(){smoothTok++},{passive:true})});
+function smoothTo(el,id){
+  var hd=document.querySelector("header"),root=document.documentElement,sc=document.scrollingElement||root,
+      y0=sc.scrollTop,raw=id==="top"?0:el.getBoundingClientRect().top+y0,
+      y1=Math.max(0,raw-(raw>y0?12:(hd?hd.offsetHeight:60)+8)),dist=y1-y0;
+  if(Math.abs(dist)<4)return;
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){sc.scrollTop=y1;return}
+  var ad=Math.abs(dist),dur=Math.min(1100,Math.max(600,ad*0.4)),maxS=Math.min(6,Math.max(1.5,ad/420)),
+      mb=document.getElementById("mbg"),body=document.body,tok=++smoothTok,t0=null,lt=0,last=y0,sg=0,lvl=0,slow=0;
+  root.style.scrollBehavior="auto";root.classList.add("mv");
+  document.querySelectorAll(".rv:not(.in)").forEach(function(x){x.classList.add("in")});
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function setL(l){if(l===lvl)return;lvl=l;if(mb)mb.setAttribute("stdDeviation","0 "+l);if(l>0)body.classList.add("moving");else body.classList.remove("moving")}
+  function done(){setL(0);root.style.scrollBehavior="";root.classList.remove("mv")}
+  function step(t){
+    if(tok!==smoothTok){done();return}
+    if(t0===null){t0=t;lt=t;requestAnimationFrame(step);return}
+    var dt=t-lt;lt=t;
+    var pr=Math.min(1,(t-t0)/dur),y=y0+dist*ease(pr);
+    sc.scrollTop=y;
+    if(!lowFx){
+      if(dt>34)slow++;
+      if(slow>=4){lowFx=true;setL(0)}
+      else{var v=Math.abs(y-last)*(16.7/Math.max(8,dt));sg=sg*.75+Math.min(maxS,v*.55)*.25;setL(Math.round(sg*2)/2)}
+    }
+    last=y;
+    if(pr<1)requestAnimationFrame(step);else done();
+  }
+  requestAnimationFrame(step);
+}
+document.addEventListener("click",function(e){
+  var a=e.target.closest('a[href^="#"]');
+  if(!a)return;
+  var id=a.getAttribute("href").slice(1),t=id&&document.getElementById(id);
+  if(!t)return;
+  e.preventDefault();smoothTo(t,id);
+  try{history.replaceState(null,"","#"+id)}catch(x){}
+});
 var lastY=0;
 function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10);var y=h.scrollTop;if(y>90&&y>lastY+4)document.body.classList.add("hid");else if(y<lastY-4||y<=90)document.body.classList.remove("hid");lastY=y}
 addEventListener("scroll",onS,{passive:true});onS();
