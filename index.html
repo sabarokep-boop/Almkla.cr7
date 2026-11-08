@@ -196,6 +196,7 @@ body.moving .hero,body.moving section,body.moving .stats,body.moving .quick,body
 html.mv header,html.mv body::before{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.92);background:color-mix(in srgb,var(--card) 92%,transparent)}
 html.mv .rv{transition:none!important}
 html.mv .fab,html.mv .hero .btn{animation-play-state:paused}
+html{overflow-anchor:none}
 </style>
 </head>
 <body>
@@ -397,7 +398,12 @@ function $(i){return document.getElementById(i)}
 $("path").innerHTML=GRADES.map(function(g,i){return '<button class="step" data-go="'+g.id+'"><i>'+(i+1)+'</i><b>'+g.name+'</b><small>'+(g.stage==="mid"?"متوسطة":"ثانوية")+(g.tracks?" · علمي وأدبي":"")+'</small></button>'}).join("");
 $("fg").innerHTML='<option value="">اختر الصف</option>'+GRADES.map(function(g){return '<option>'+g.name+'</option>'}).join("");
 if(WA)$("fab").href="https://wa.me/"+WA;
-document.addEventListener("click",function(e){var s=e.target.closest("[data-go]");if(s){cur=s.getAttribute("data-go");trk=null;$("q").value="";render();
+document.addEventListener("click",function(e){var s=e.target.closest("[data-go]");if(s){
+    var rt=document.documentElement,sc=document.scrollingElement||rt,a0=s.getBoundingClientRect().top;
+    rt.style.scrollBehavior="auto";
+    cur=s.getAttribute("data-go");trk=null;$("q").value="";render();
+    var d=s.getBoundingClientRect().top-a0;if(d){sc.scrollTop+=d}
+    lastY=sc.scrollTop;
     document.querySelectorAll("#books .grades,#books .panel,#tracks").forEach(function(x){x.classList.remove("blurin");void x.offsetWidth;x.classList.add("blurin")});
     smoothTo($("books"))}});
 $("q").addEventListener("input",function(){
@@ -451,8 +457,8 @@ function smoothTo(el,id){
   var hd=document.querySelector("header"),root=document.documentElement,sc=document.scrollingElement||root,
       y0=sc.scrollTop,raw=id==="top"?0:el.getBoundingClientRect().top+y0,
       y1=Math.max(0,raw-(raw>y0?12:(hd?hd.offsetHeight:60)+8)),dist=y1-y0;
-  if(Math.abs(dist)<4)return;
-  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){sc.scrollTop=y1;return}
+  if(Math.abs(dist)<4){root.style.scrollBehavior="";return}
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){sc.scrollTop=y1;root.style.scrollBehavior="";return}
   var ad=Math.abs(dist),dur=Math.min(1100,Math.max(600,ad*0.4)),maxS=Math.min(6,Math.max(1.5,ad/420)),
       mb=document.getElementById("mbg"),body=document.body,tok=++smoothTok,t0=null,lt=0,last=y0,sg=0,lvl=0,slow=0;
   root.style.scrollBehavior="auto";root.classList.add("mv");
