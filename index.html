@@ -197,6 +197,10 @@ html.mv header,html.mv body::before{-webkit-backdrop-filter:none;backdrop-filter
 html.mv .rv{transition:none!important}
 html.mv .fab,html.mv .hero .btn{animation-play-state:paused}
 html{overflow-anchor:none}
+/* زر تحميل الكتاب: خانة كبيرة زرقاء */
+.book a{display:block;margin-top:auto;padding:12px 14px;background:#1d3f9e;color:#fff;border-radius:10px;text-align:center;font-weight:700;font-size:15px;text-decoration:none}
+.book a:hover{background:#2a52c4}
+.book a:focus-visible{outline:3px solid #ffb547;outline-offset:2px}
 </style>
 </head>
 <body>
@@ -205,7 +209,7 @@ html{overflow-anchor:none}
 <header><div class="wrap">
   <a class="logo" href="#top">🏫 مجمع سبأ روكب</a>
   <nav>
-    <a href="#about">عن المدرسة</a><a href="#books">الكتب المدرسية</a><a href="#journey">رحلة الطالب</a><a href="#news">الأخبار</a><a href="#schedule">المواعيد</a><a href="#exams">الاختبارات</a><a href="#contact">تواصل معنا</a>
+    <a href="#about">عن المدرسة</a><a href="#books">الكتب المدرسية</a><a href="#journey">رحلة الطالب</a><a href="#news">الأخبار</a><a href="#schedule">بدء الدوام</a><a href="#exams">الاختبارات</a><a href="#contact">تواصل معنا</a>
   </nav>
   <a class="cta" href="#register">📝 سجّل الآن</a>
 </div></header>
@@ -256,7 +260,7 @@ html{overflow-anchor:none}
     <div class="stat"><b>2</b><span>مساران علمي وأدبي</span></div>
   </div>
 
-  <div class="quick"><a href="#books">📚 كتب صفّي</a><a href="#journey">🧭 رحلة الطالب</a><a href="#schedule">🕗 المواعيد</a><a href="#exams">🗓 الاختبارات</a><a href="#news">📰 الأخبار</a><a href="#register">📝 التسجيل</a></div>
+  <div class="quick"><a href="#books">📚 كتب صفّي</a><a href="#journey">🧭 رحلة الطالب</a><a href="#schedule">🕗 بدء الدوام</a><a href="#exams">🗓 الاختبارات</a><a href="#news">📰 الأخبار</a><a href="#register">📝 التسجيل</a></div>
 
   <section id="about">
     <h2>عن المدرسة</h2>
@@ -272,7 +276,7 @@ html{overflow-anchor:none}
   <section id="books">
     <h2>الكتب المدرسية</h2>
     <p class="sub">اختر صفّك لتظهر لك كتبه، أو ابحث عن أي كتاب مباشرة.</p>
-    <input class="search" id="q" type="search" placeholder="🔍 ابحث عن كتاب، مثال: رياضيات">
+    <input class="search" id="q" type="search" placeholder="🔍 ابحث، مثال: رياضيات ثالث">
 
     <div class="stage">🏫 المرحلة المتوسطة</div>
     <div class="grades" id="g-mid"></div>
@@ -299,8 +303,8 @@ html{overflow-anchor:none}
   </section>
 
   <section id="schedule">
-    <h2>المواعيد</h2>
-    <p class="sub">الدوام والاختبارات.</p>
+    <h2>بدء الدوام</h2>
+    <p class="sub">مواعيد الدوام في المجمع.</p>
     <div class="tw"><table>
       <tr><th>المرحلة</th><th>بداية الدوام</th><th>نهاية الدوام</th></tr>
       <tr><td>المتوسطة</td><td>7:45 ص</td><td>12:30 م</td></tr>
@@ -319,7 +323,7 @@ html{overflow-anchor:none}
   <section id="register">
     <h2>سجّل الآن</h2>
     <p class="sub">نموذج سريع، دقيقتان فقط.</p>
-    <div class="card"><div class="form"><input id="fn" placeholder="اسم الطالب" autocomplete="name" maxlength="60"><input id="fp" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" placeholder="رقم ولي الأمر (أرقام فقط)"><select id="fg"></select><button class="btn" id="fs">📲 إرسال الطلب</button></div><p id="fm" class="sub" style="margin:10px 0 0"></p></div>
+    <div class="card"><div class="form"><input id="fn" placeholder="اسم الطالب" autocomplete="name" maxlength="60"><input id="fp" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" placeholder="رقم ولي الأمر"><select id="fg"></select><button class="btn" id="fs">📲 إرسال الطلب</button></div><p id="fm" class="sub" style="margin:10px 0 0"></p></div>
   </section>
 
   <section id="contact">
@@ -337,6 +341,16 @@ html{overflow-anchor:none}
 <footer><div class="wrap">© 2026 مجمع سبأ روكب<br>حقوق الطبع محفوظة: محمد سرور بامزعب</div></footer>
 
 <script>
+/* إعادة التحميل ترجع الصفحة من البداية */
+try{history.scrollRestoration="manual"}catch(e){}
+try{if(location.hash)history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+var umv=false;
+["wheel","touchstart","keydown","mousedown"].forEach(function(ev){addEventListener(ev,function(){umv=true},{passive:true})});
+function toTop(){scrollTo({top:0,left:0,behavior:"instant"})}
+toTop();
+addEventListener("load",function(){if(!umv)toTop()});
+addEventListener("pageshow",function(e){if(e.persisted||!umv)toTop()});
+addEventListener("beforeunload",toTop);
 /* ===== بيانات الصفوف والكتب =====
    لإضافة كتاب: ضع {title:"الرياضيات", subject:"رياضيات", url:"رابط التحميل"} داخل books للصف،
    أما الثاني والثالث الثانوي فداخل مسار "علمي" أو "أدبي" في tracks */
@@ -383,7 +397,7 @@ function render(){
   if(list===null){l.innerHTML='<div class="empty">👆 اختر المسار (علمي أو أدبي) لتظهر الكتب</div>';return}
   if(!list.length){l.innerHTML='<div class="empty">📖 ستتم إضافة هذه الكتب قريبًا</div>';return}
   l.innerHTML='<div class="books">'+list.map(function(b){
-    return '<div class="book"><b>'+esc(b.title)+'</b><span>'+esc(b.subject||"")+'</span>'+(b.url?'<a href="'+esc(b.url)+'" download>⬇ تحميل الكتاب</a>':'')+'</div>';
+    return '<div class="book"><b>'+esc(b.title)+'</b><span>'+esc(b.subject||"")+'</span>'+(b.url?'<a href="'+esc(b.url)+'" download>تحميل الكتاب</a>':'')+'</div>';
   }).join("")+'</div>';
 }
 document.addEventListener("click",function(e){
@@ -406,24 +420,42 @@ document.addEventListener("click",function(e){var s=e.target.closest("[data-go]"
     lastY=sc.scrollTop;
     document.querySelectorAll("#books .grades,#books .panel,#tracks").forEach(function(x){x.classList.remove("blurin");void x.offsetWidth;x.classList.add("blurin")});
     smoothTo($("books"))}});
-$("q").addEventListener("input",function(){
-  var v=this.value.trim().toLowerCase();
-  if(!v){render();return}
+/* ===== بحث ذكي: يفهم الصف والمادة والمسار بأي ترتيب وبدون كتابة الاسم كامل ===== */
+function nz(t){return String(t).toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/[٠-٩]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[^\p{L}\p{N}]+/gu," ").trim()}
+var STOP=["صف","كتاب","كتب","مادة","ماده","منهج"],ORD=["سابع","ثامن","تاسع","اول","ثاني","ثالث","ثانوي","ثانويه","متوسط","متوسطه","علمي","ادبي"];
+function stageWords(g){return g.stage==="mid"?"متوسط متوسطه":"ثانوي ثانويه"}
+function allBooks(){
   var r=[];
   GRADES.forEach(function(g){
-    var a=g.tracks?[]:g.books.map(function(b){return [g.name,b]});
-    if(g.tracks)Object.keys(g.tracks).forEach(function(t){g.tracks[t].forEach(function(b){a.push([g.name+" – "+t,b])})});
-    a.forEach(function(x){if((x[1].title+" "+(x[1].subject||"")).toLowerCase().indexOf(v)>-1)r.push(x)});
+    function add(b,tr){r.push({b:b,label:g.name+(tr?" · "+tr:""),idx:nz(b.title+" "+(b.subject||"")+" "+g.name+" "+stageWords(g)+" "+(tr||""))})}
+    if(g.tracks)Object.keys(g.tracks).forEach(function(t){g.tracks[t].forEach(function(b){add(b,t)})});
+    else g.books.forEach(function(b){add(b)});
   });
-  $("ptitle").textContent="نتائج البحث";
-  $("plist").innerHTML=r.length?'<div class="books">'+r.map(function(x){return '<div class="book"><b>'+esc(x[1].title)+'</b><span>'+esc(x[0])+'</span>'+(x[1].url?'<a href="'+esc(x[1].url)+'" download>⬇ تحميل الكتاب</a>':'')+'</div>'}).join("")+'</div>':'<div class="empty">لا توجد نتائج مطابقة</div>';
+  return r;
+}
+function bookCount(g){return g.tracks?Object.keys(g.tracks).reduce(function(n,t){return n+g.tracks[t].length},0):g.books.length}
+var NUMW={"1":"اول","2":"ثاني","3":"ثالث","7":"سابع","8":"ثامن","9":"تاسع"};
+$("q").addEventListener("input",function(){
+  var toks=nz(this.value).split(" ").filter(Boolean).map(function(t){t=t.length>3&&t.indexOf("ال")===0?t.slice(2):t;t=NUMW[t]||t;return t.replace(/^(اول|ثاني|ثالث|سابع|ثامن|تاسع)[يه]$/,"$1")}).filter(function(t){return STOP.indexOf(t)<0});
+  if(!toks.length){render();return}
+  var res=allBooks().filter(function(x){return toks.every(function(t){return x.idx.indexOf(t)>-1})}),l=$("plist");
+  $("ptitle").textContent="نتائج البحث"+(res.length?" ("+res.length+")":"");
+  if(res.length){
+    l.innerHTML='<div class="books">'+res.map(function(x){return '<div class="book"><b>'+esc(x.b.title)+'</b><span>'+esc(x.label)+'</span>'+(x.b.url?'<a href="'+esc(x.b.url)+'" download>تحميل الكتاب</a>':'')+'</div>'}).join("")+'</div>';
+    return;
+  }
+  var gt=toks.filter(function(t){return ORD.indexOf(t)>-1}),
+      gs=gt.length?GRADES.filter(function(g){var i=nz(g.name+" "+stageWords(g)+" "+(g.tracks?"علمي ادبي":""));return gt.every(function(t){return i.indexOf(t)>-1})}):[];
+  if(gs.length&&gs.every(function(g){return bookCount(g)===0})){
+    l.innerHTML='<div class="empty">كتب «'+esc(gs.map(function(g){return g.name}).join("، "))+'» لم تُضف بعد</div>';
+  }else l.innerHTML='<div class="empty">لا توجد نتائج مطابقة</div>';
 });
 $("fn").addEventListener("input",function(){var v=this.value.replace(/[0-9٠-٩۰-۹]/g,"");if(v!==this.value)this.value=v});
 $("fp").addEventListener("input",function(){var v=this.value.replace(/[٠-٩]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[۰-۹]/g,function(d){return d.charCodeAt(0)-1776}).replace(/\D/g,"");if(v!==this.value)this.value=v});
 $("fs").onclick=function(){
   var n=$("fn").value.trim(),p=$("fp").value.trim(),g=$("fg").value,m=$("fm");
   if(!n||!p||!g){m.textContent="فضلًا أكمل الحقول الثلاثة.";return}
-  if(p.length<8){m.textContent="فضلًا اكتب رقم الهاتف كاملًا (أرقام فقط).";return}
+  if(p.length<8){m.textContent="فضلًا اكتب رقم ولي الأمر كاملًا.";return}
   if(WA){window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("طلب تسجيل\nالاسم: "+n+"\nالصف: "+g+"\nالهاتف: "+p),"_blank")}
   else m.textContent="تم تجهيز النموذج، ويبدأ الإرسال بعد إضافة رقم واتساب المجمع.";
 };
@@ -488,7 +520,6 @@ document.addEventListener("click",function(e){
   var id=a.getAttribute("href").slice(1),t=id&&document.getElementById(id);
   if(!t)return;
   e.preventDefault();smoothTo(t,id);
-  try{history.replaceState(null,"","#"+id)}catch(x){}
 });
 var lastY=0;
 function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10);var y=h.scrollTop;if(y>90&&y>lastY+4)document.body.classList.add("hid");else if(y<lastY-4||y<=90)document.body.classList.remove("hid");lastY=y}
