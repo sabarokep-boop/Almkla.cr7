@@ -368,7 +368,7 @@ var GRADES=[
   {title:"الرياضيات",subject:"رياضيات",url:"s3-math.pdf"},
   {title:"الفيزياء",subject:"علوم",url:"s3-physics.pdf"},
   {title:"الكيمياء",subject:"علوم",url:"s3-chem.pdf"},
-  {title:"علم الأحياء وعلم الأرض",subject:"علوم",url:"s3-biology.pdf"},
+  {title:"الأحياء",subject:"علوم",parts:["s3-biology-part1.bin","s3-biology-part2.bin"],fname:"الأحياء - الصف الثالث ثانوي.pdf"},
   {title:"English – Pupil’s Book",subject:"اللغة الإنجليزية (الدروس)",url:"s3-eng-pupil.pdf"},
   {title:"English – Workbook",subject:"اللغة الإنجليزية (التمارين)",url:"s3-eng-workbook.pdf"},
   {title:"الحديث والفقه",subject:"علوم إسلامية",url:"s3-hadith.pdf"}
@@ -397,7 +397,7 @@ function render(){
   if(list===null){l.innerHTML='<div class="empty">👆 اختر المسار (علمي أو أدبي) لتظهر الكتب</div>';return}
   if(!list.length){l.innerHTML='<div class="empty">📖 ستتم إضافة هذه الكتب قريبًا</div>';return}
   l.innerHTML='<div class="books">'+list.map(function(b){
-    return '<div class="book"><b>'+esc(b.title)+'</b><span>'+esc(b.subject||"")+'</span>'+(b.url?'<a href="'+esc(b.url)+'" download>تحميل الكتاب</a>':'')+'</div>';
+    return '<div class="book"><b>'+esc(b.title)+'</b><span>'+esc(b.subject||"")+'</span>'+dlLink(b)+'</div>';
   }).join("")+'</div>';
 }
 document.addEventListener("click",function(e){
@@ -441,7 +441,7 @@ $("q").addEventListener("input",function(){
   var res=allBooks().filter(function(x){return toks.every(function(t){return x.idx.indexOf(t)>-1})}),l=$("plist");
   $("ptitle").textContent="نتائج البحث"+(res.length?" ("+res.length+")":"");
   if(res.length){
-    l.innerHTML='<div class="books">'+res.map(function(x){return '<div class="book"><b>'+esc(x.b.title)+'</b><span>'+esc(x.label)+'</span>'+(x.b.url?'<a href="'+esc(x.b.url)+'" download>تحميل الكتاب</a>':'')+'</div>'}).join("")+'</div>';
+    l.innerHTML='<div class="books">'+res.map(function(x){return '<div class="book"><b>'+esc(x.b.title)+'</b><span>'+esc(x.label)+'</span>'+dlLink(x.b)+'</div>'}).join("")+'</div>';
     return;
   }
   var gt=toks.filter(function(t){return ORD.indexOf(t)>-1}),
@@ -520,6 +520,38 @@ document.addEventListener("click",function(e){
   var id=a.getAttribute("href").slice(1),t=id&&document.getElementById(id);
   if(!t)return;
   e.preventDefault();smoothTo(t,id);
+});
+/* ===== تحميل كتاب مقسّم إلى ملفين: يُحمَّل الجزءان معًا ويندمجان في ملف PDF واحد ===== */
+function dlLink(b){
+  if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
+  return b.url?'<a href="'+esc(b.url)+'" download>تحميل الكتاب</a>':'';
+}
+document.addEventListener("click",function(e){
+  var a=e.target.closest("a.dlp");
+  if(!a)return;
+  e.preventDefault();
+  if(a.getAttribute("aria-busy")==="true")return;
+  var parts=a.getAttribute("data-parts").split("|"),name=a.getAttribute("data-name"),label="تحميل الكتاب",got=[],tot=[];
+  parts.forEach(function(_,i){got[i]=0;tot[i]=0});
+  a.setAttribute("aria-busy","true");a.style.pointerEvents="none";
+  function sum(x){return x.reduce(function(p,c){return p+c},0)}
+  function show(){var T=sum(tot),G=sum(got);a.textContent=T?"جارٍ التحميل "+Math.min(99,Math.round(G/T*100))+"%":"جارٍ التحميل..."}
+  function fin(t){a.textContent=t;setTimeout(function(){a.textContent=label;a.removeAttribute("aria-busy");a.style.pointerEvents=""},2500)}
+  show();
+  Promise.all(parts.map(function(u,i){
+    return fetch(u).then(function(r){
+      if(!r.ok)throw new Error("http "+r.status);
+      tot[i]=+r.headers.get("content-length")||0;
+      if(!r.body||!r.body.getReader)return r.blob();
+      var rd=r.body.getReader(),ch=[];
+      return (function pump(){return rd.read().then(function(x){if(x.done)return new Blob(ch);ch.push(x.value);got[i]+=x.value.length;show();return pump()})})();
+    });
+  })).then(function(bl){
+    var url=URL.createObjectURL(new Blob(bl,{type:"application/pdf"})),d=document.createElement("a");
+    d.href=url;d.download=name;document.body.appendChild(d);d.click();d.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},120000);
+    fin("تم التحميل");
+  }).catch(function(){fin("تعذّر التحميل، حاول مرة ثانية")});
 });
 var lastY=0;
 function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10);var y=h.scrollTop;if(y>90&&y>lastY+4)document.body.classList.add("hid");else if(y<lastY-4||y<=90)document.body.classList.remove("hid");lastY=y}
