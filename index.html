@@ -231,6 +231,10 @@ html{overflow-anchor:none}
 html,body{overflow-x:clip}
 .ccard{display:block;color:inherit;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
 .ccard:active{transform:scale(.98)}
+.about-text{margin:0 0 20px;line-height:1.9;font-size:17px}
+.about-text p{margin:0 0 10px}
+.card.fbcard{background:#1877f2;border-color:#1877f2;box-shadow:0 8px 20px rgba(24,119,242,.3)}
+.card.fbcard h3,.card.fbcard p{color:#fff}
 html.warm .rv{opacity:1!important;transform:none!important;transition:none!important}
 .logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;flex:none}
 </style>
@@ -267,7 +271,10 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 
   <section id="about">
     <h2>عن المدرسة</h2>
-    <p class="sub">مجمع سبأ روكب يجمع المتوسط والثانوي في بيئة تعليمية آمنة ومحفّزة.</p>
+    <div class="about-text">
+      <p>تأسست النواة الأولى للمجمع عام 1999م باسم ثانوية سبأ روكب للبنين، لتكون أول ثانوية في مناطق روكب وبويش والعيص والحرشيات. واليوم يضم المجمع الطلاب من الصف السابع الأساسي حتى الثالث الثانوي بقسميه العلمي والأدبي، ويشارك بانتظام في ملتقيات التعليم الفني، ومشاريع الحاسوب لطلاب الثالث الثانوي، والفعاليات الرياضية والصحية.</p>
+    </div>
+    <p class="sub" style="margin-top:8px">مجمع سبأ روكب يجمع المتوسط والثانوي في بيئة تعليمية آمنة ومحفّزة.</p>
     <div class="grid">
       <div class="card"><div class="ico">🎯</div><h3>رسالتنا</h3><p>تقديم تعليم متميز يُنمّي المهارات والقيم ويُعدّ الطالب للمستقبل.</p></div>
       <div class="card"><div class="ico">👨‍🏫</div><h3>كادر تعليمي</h3><p>معلمون أكفاء ومتابعة مستمرة لمستوى كل طالب.</p></div>
@@ -327,6 +334,7 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
     <h2>سجّل الآن</h2>
     <p class="sub">نموذج سريع، دقيقتان فقط.</p>
     <div class="card"><div class="form"><input id="fn" placeholder="اسم الطالب" autocomplete="name" maxlength="60"><input id="fp" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" placeholder="رقم ولي الأمر"><select id="fg"></select><button class="btn" id="fs">📲 إرسال الطلب</button></div><p id="fm" class="sub" style="margin:10px 0 0"></p></div>
+    <p class="sub" style="margin-top:14px">يبدأ التسجيل للعام الدراسي الجديد منتصف أغسطس، يومياً من 8:00 صباحاً حتى 12:00 ظهراً حتى اكتمال المقاعد. يحضر الطالب أو ولي أمره شهادة الميلاد والوثائق الدراسية المطلوبة، مع دفع المساهمة المجتمعية المقررة.</p>
   </section>
 
   <section id="contact">
@@ -334,8 +342,9 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
     <p class="sub">يسعدنا استقبال استفساراتكم.</p>
     <div class="grid">
       <div class="card"><div class="ico">📍</div><h3>العنوان</h3><p>روكب</p></div>
-      <a class="card ccard" href="tel:+967777289691" aria-label="اتصل بالمجمع"><div class="ico">📞</div><h3>الهاتف</h3><p><span style="direction:ltr;unicode-bidi:embed;display:inline-block">+967 777 289 691</span></p></a>
+      <a class="card ccard" href="tel:+9675326066" aria-label="اتصل بالمجمع"><div class="ico">📞</div><h3>الهاتف</h3><p><span style="direction:ltr;unicode-bidi:embed;display:inline-block">05-326066</span></p></a>
       <a class="card ccard" href="mailto:sabarokep@gmail.com" aria-label="أرسل بريدًا إلى المجمع"><div class="ico">✉️</div><h3>البريد</h3><p><span style="direction:ltr;unicode-bidi:embed;display:inline-block">sabarokep@gmail.com</span></p></a>
+      <a class="card ccard fbcard" href="https://www.facebook.com/share/1SxqitdqMH/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="زيارة صفحة المجمع على فيسبوك"><div class="ico">📘</div><h3>صفحتنا على فيسبوك</h3><p>مجمع سبأ روكب التعليمي للبنين: إعلانات التسجيل والنتائج والأنشطة الطلابية، تابعونا هنا.</p></a>
     </div>
   </section>
 </div>
