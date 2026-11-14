@@ -233,10 +233,27 @@ html,body{overflow-x:clip}
 .ccard:active{transform:scale(.98)}
 .about-text{margin:0 0 20px;line-height:1.9;font-size:17px}
 .about-text p{margin:0 0 10px}
+.dlp{position:relative;overflow:hidden;transition:background-color .3s}
+.dlp[aria-busy="true"]{background-image:linear-gradient(to left,rgba(255,255,255,.28) var(--p,0%),transparent var(--p,0%))}
+.dlp[aria-busy="true"]::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:translateX(-100%);animation:dlshine 1.2s ease-in-out infinite;pointer-events:none}
+@keyframes dlshine{to{transform:translateX(100%)}}
+.dlp.done{background-color:#1f8a4c !important}
 .card.fbcard{background:#1877f2;border-color:#1877f2;box-shadow:0 8px 20px rgba(24,119,242,.3)}
 .card.fbcard h3,.card.fbcard p{color:#fff}
 html.warm .rv{opacity:1!important;transform:none!important;transition:none!important}
 .logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;flex:none}
+
+  .adm-btn{position:fixed;top:10px;left:10px;z-index:200;background:#1f3a68;color:#f0c35a;border:1px solid #d4a72c;border-radius:10px;padding:7px 11px;font:inherit;font-size:13px;cursor:pointer}
+  .adm-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-start;justify-content:center;z-index:300;overflow:auto;padding:40px 12px}
+  .adm-ov.on{display:flex}
+  .adm-box{background:#101a2e;color:#f4f6ff;border-radius:14px;padding:18px;width:min(560px,100%);box-sizing:border-box;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .adm-box input,.adm-box select,.adm-box textarea{width:100%;box-sizing:border-box;margin:4px 0 10px;padding:9px;border-radius:8px;border:1px solid #334;background:#0b1426;color:#f4f6ff;font:inherit}
+  .adm-box button{font:inherit;cursor:pointer;border-radius:8px;border:0}
+  .adm-box button.p{background:#1f8a4c;color:#fff;padding:9px 14px}
+  .adm-box button.d{background:#8a2430;color:#fff;padding:5px 9px;font-size:12px}
+  .adm-item{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #223;padding:7px 0;font-size:14px}
+  .adm-msg{font-size:13px;color:#ffb3b3;min-height:18px}
+  .adm-h{margin:14px 0 6px;color:#f0c35a;font-weight:700}
 </style>
 </head>
 <body>
@@ -555,7 +572,7 @@ document.addEventListener("click",function(e){
 /* ===== تحميل كتاب مقسّم إلى ملفين: يُحمَّل الجزءان معًا ويندمجان في ملف PDF واحد ===== */
 function dlLink(b){
   if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
-  return b.url?'<a href="'+esc(b.url)+'" download>تحميل الكتاب</a>':'';
+  return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'';
 }
 document.addEventListener("click",function(e){
   var a=e.target.closest("a.dlp");
@@ -566,8 +583,8 @@ document.addEventListener("click",function(e){
   parts.forEach(function(_,i){got[i]=0;tot[i]=0});
   a.setAttribute("aria-busy","true");a.style.pointerEvents="none";
   function sum(x){return x.reduce(function(p,c){return p+c},0)}
-  function show(){var T=sum(tot),G=sum(got);a.textContent=T?"جارٍ التحميل "+Math.min(99,Math.round(G/T*100))+"%":"جارٍ التحميل..."}
-  function fin(t){a.textContent=t;setTimeout(function(){a.textContent=label;a.removeAttribute("aria-busy");a.style.pointerEvents=""},2500)}
+  function show(){var T=sum(tot),G=sum(got),p=T?Math.min(99,Math.round(G/T*100)):0;a.style.setProperty("--p",p+"%");a.textContent=T?"جارٍ التحميل "+p+"%":"جارٍ التحميل..."}
+  function fin(t,ok){a.style.removeProperty("--p");a.textContent=t;if(ok)a.classList.add("done");setTimeout(function(){a.textContent=label;a.classList.remove("done");a.removeAttribute("aria-busy");a.style.pointerEvents=""},2500)}
   show();
   Promise.all(parts.map(function(u,i){
     return fetch(u).then(function(r){
@@ -581,7 +598,7 @@ document.addEventListener("click",function(e){
     var url=URL.createObjectURL(new Blob(bl,{type:"application/pdf"})),d=document.createElement("a");
     d.href=url;d.download=name;document.body.appendChild(d);d.click();d.remove();
     setTimeout(function(){URL.revokeObjectURL(url)},120000);
-    fin("تم التحميل");
+    fin("تم التحميل ✓",true);
   }).catch(function(){fin("تعذّر التحميل، حاول مرة ثانية")});
 });
 var lastY=0;
@@ -661,6 +678,138 @@ exRender();
 (function(){var d=new Date(),t=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
   document.querySelectorAll("#exams tr[data-d]").forEach(function(r){var x=r.getAttribute("data-d");if(x<t)r.classList.add("past");else if(x===t)r.classList.add("today")});})();
 render();
+</script>
+<button class="adm-btn" id="adm-open">🔐 دخول المدير</button>
+<div class="adm-ov" id="adm-ov"><div class="adm-box" id="adm-box"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+try{
+var SB_URL="https://mmzfyatemnehbanaxagc.supabase.co";
+var SB_KEY="sb_publishable_huokCRMIs9Qa3yGu9rj1-g_FXYy0GHj";
+var sb=window.supabase.createClient(SB_URL,SB_KEY);
+var DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+var MONTHS=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fmtDate(iso){var d=new Date(iso+"T00:00:00");return {day:DAYS[d.getDay()],label:d.getDate()+" "+MONTHS[d.getMonth()]}}
+function grp(id){return (typeof EX!=="undefined"?EX:[]).filter(function(g){return g.id===id})[0]}
+
+/* ---------- public: show news and exams from the database ---------- */
+async function loadNews(){
+  var r=await sb.from("news").select("*").order("created_at",{ascending:false});
+  if(r.error||!r.data) return;
+  var grid=document.querySelector("#news .grid");
+  if(!grid) return;
+  grid.querySelectorAll("[data-db]").forEach(function(n){n.remove()});
+  r.data.slice().reverse().forEach(function(n){
+    var d=new Date(n.created_at);
+    var el=document.createElement("div");
+    el.className="card news"; el.setAttribute("data-db","1");
+    el.innerHTML='<div class="date">'+esc(d.getDate()+" "+MONTHS[d.getMonth()])+'</div><div><h3>'+esc(n.title)+'</h3><p>'+esc(n.body||"")+'</p></div>';
+    grid.insertBefore(el,grid.firstChild);
+  });
+}
+async function loadExams(){
+  var r=await sb.from("exams").select("*").order("exam_date",{ascending:true});
+  if(r.error||!r.data||typeof EX==="undefined") return;
+  EX.forEach(function(g){
+    var mine=r.data.filter(function(x){return x.grade===g.id});
+    var row=function(x){return [x.exam_date,x.day,x.date_label,x.subject]};
+    if(g.tracks){ Object.keys(g.tracks).forEach(function(t){ g.tracks[t]=mine.filter(function(x){return x.track===t}).map(row) }); }
+    else { g.rows=mine.map(row); }
+  });
+  if(typeof exRender==="function") exRender();
+}
+loadNews(); loadExams();
+
+/* ---------- admin: login and editing ---------- */
+var ov=document.getElementById("adm-ov"), box=document.getElementById("adm-box");
+var admData={news:[],exams:[]};
+async function refreshAdmin(){
+  var n=await sb.from("news").select("*").order("created_at",{ascending:false});
+  var e=await sb.from("exams").select("*").order("exam_date",{ascending:true});
+  admData.news=n.data||[]; admData.exams=e.data||[];
+}
+function showModal(h){box.innerHTML=h;ov.classList.add("on")}
+function closeModal(){ov.classList.remove("on")}
+function msg(t){var m=document.getElementById("adm-msg");if(m)m.textContent=t}
+
+function loginHTML(){
+  return '<h3 style="margin:0 0 8px;color:#f0c35a">دخول المدير</h3>'+
+  '<input id="adm-em" type="email" placeholder="البريد الإلكتروني" autocomplete="username">'+
+  '<input id="adm-pw" type="password" placeholder="كلمة المرور" autocomplete="current-password">'+
+  '<button class="p" id="adm-login">دخول</button><div class="adm-msg" id="adm-msg"></div>';
+}
+function panelHTML(){
+  var gradeOpts=(typeof EX!=="undefined"?EX:[]).map(function(g){return '<option value="'+esc(g.id)+'">'+esc(g.name)+'</option>'}).join("");
+  var news=admData.news.map(function(n){return '<div class="adm-item"><span>'+esc(n.title)+'</span><button class="d" data-delnews="'+esc(n.id)+'">حذف</button></div>'}).join("")||'<div class="adm-msg">لا توجد أخبار</div>';
+  var exams=admData.exams.map(function(x){var g=grp(x.grade);return '<div class="adm-item"><span>'+esc(x.subject)+' - '+esc(x.date_label)+' ('+esc(g?g.name:"")+(x.track?' - '+esc(x.track):'')+')</span><button class="d" data-delexam="'+esc(x.id)+'">حذف</button></div>'}).join("")||'<div class="adm-msg">لا توجد اختبارات</div>';
+  return '<h3 style="margin:0 0 4px;color:#f0c35a">لوحة التعديل</h3>'+
+  '<div class="adm-h">إضافة خبر</div>'+
+  '<input id="adm-nt" placeholder="عنوان الخبر">'+
+  '<textarea id="adm-nb" rows="3" placeholder="نص الخبر"></textarea>'+
+  '<button class="p" id="adm-addnews">نشر الخبر</button>'+
+  '<div class="adm-h">الأخبار المنشورة</div>'+news+
+  '<div class="adm-h">إضافة موعد اختبار</div>'+
+  '<select id="adm-eg">'+gradeOpts+'</select>'+
+  '<select id="adm-et" style="display:none"><option value="علمي">علمي</option><option value="أدبي">أدبي</option></select>'+
+  '<input id="adm-ed" type="date">'+
+  '<input id="adm-es" placeholder="اسم المادة">'+
+  '<button class="p" id="adm-addexam">إضافة الاختبار</button>'+
+  '<div class="adm-h">الاختبارات المضافة</div>'+exams+
+  '<div class="adm-msg" id="adm-msg"></div>'+
+  '<button class="p" style="background:#334;margin-top:12px" id="adm-logout">تسجيل الخروج</button>';
+}
+async function openAdmin(){
+  var s=await sb.auth.getSession();
+  if(s.data&&s.data.session){ await refreshAdmin(); showModal(panelHTML()); }
+  else showModal(loginHTML());
+}
+async function refreshAll(){ await loadNews(); await loadExams(); await refreshAdmin(); showModal(panelHTML()); }
+
+document.getElementById("adm-open").addEventListener("click",openAdmin);
+ov.addEventListener("click",function(e){ if(e.target===ov) closeModal(); });
+box.addEventListener("change",function(e){
+  if(e.target.id==="adm-eg"){ var g=grp(e.target.value); document.getElementById("adm-et").style.display=(g&&g.tracks)?"block":"none"; }
+});
+box.addEventListener("click",async function(e){
+  var t=e.target;
+  if(t.id==="adm-login"){
+    var em=document.getElementById("adm-em").value.trim(), pw=document.getElementById("adm-pw").value;
+    var r=await sb.auth.signInWithPassword({email:em,password:pw});
+    if(r.error){ msg("البيانات غير صحيحة"); return; }
+    await refreshAdmin(); showModal(panelHTML()); return;
+  }
+  if(t.id==="adm-logout"){ await sb.auth.signOut(); closeModal(); return; }
+  if(t.id==="adm-addnews"){
+    var title=document.getElementById("adm-nt").value.trim(), body=document.getElementById("adm-nb").value.trim();
+    if(!title){ msg("اكتب عنوان الخبر"); return; }
+    var r1=await sb.from("news").insert({title:title,body:body});
+    if(r1.error){ msg("تعذر النشر: "+r1.error.message); return; }
+    await refreshAll(); return;
+  }
+  if(t.id==="adm-addexam"){
+    var gid=document.getElementById("adm-eg").value, ed=document.getElementById("adm-ed").value, es=document.getElementById("adm-es").value.trim();
+    var et=document.getElementById("adm-et"), g=grp(gid), track=(g&&g.tracks)?et.value:null;
+    if(!ed||!es){ msg("اكتب اسم المادة والتاريخ"); return; }
+    var f=fmtDate(ed);
+    var r2=await sb.from("exams").insert({subject:es,exam_date:ed,day:f.day,grade:gid,track:track,date_label:f.label});
+    if(r2.error){ msg("تعذر الإضافة: "+r2.error.message); return; }
+    await refreshAll(); return;
+  }
+  if(t.dataset && t.dataset.delnews){
+    if(!confirm("حذف هذا الخبر؟")) return;
+    await sb.from("news").delete().eq("id",t.dataset.delnews);
+    await refreshAll(); return;
+  }
+  if(t.dataset && t.dataset.delexam){
+    if(!confirm("حذف هذا الاختبار؟")) return;
+    await sb.from("exams").delete().eq("id",t.dataset.delexam);
+    await refreshAll(); return;
+  }
+});
+}catch(err){ console.error("Supabase setup failed",err); }
+})();
 </script>
 </body>
 </html>
