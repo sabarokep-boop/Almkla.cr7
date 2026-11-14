@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سبأ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark;--navy:#1f3a68;--navy-d:#0b1a33;--gold:#d4a72c}
+  html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 40%,#22345c 0%,#070d1c 75%);font-family:"Segoe UI",Tahoma,system-ui,sans-serif;color:#f4f6ff;overflow:hidden}
+  .stage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;perspective:700px}
+  .cap{font-family:"Aref Ruqaa","Lateef","Amiri","Traditional Arabic",serif;font-weight:700;font-size:clamp(20px,5vw,28px);color:#f0c35a;text-shadow:0 1px 6px rgba(0,0,0,.8),0 0 14px rgba(120,170,255,.55);letter-spacing:.04em;user-select:none}
+  .circle{position:relative;width:min(26vw,115px);aspect-ratio:1;border-radius:50%;cursor:pointer;overflow:visible;
+    transform-style:preserve-3d;transition:transform .15s ease-out;
+    background:none;
+    box-shadow:none;
+    animation:breathe 4s ease-in-out infinite}
+  @keyframes breathe{0%,100%{scale:1}50%{scale:1.08}}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .word{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:"Aref Ruqaa","Lateef","Amiri","Traditional Arabic",serif;font-weight:700;
+    font-size:clamp(24px,6.4vw,38px);line-height:1;padding-bottom:.12em;
+    background:linear-gradient(180deg,#fff1c2 0%,#f0c35a 45%,#b7842a 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.7)) drop-shadow(0 0 8px rgba(212,167,44,.35));
+    transform:translateZ(30px);transition:transform .2s;user-select:none;pointer-events:none}
+  .txt{display:inline-block;transform:scaleX(1.22);letter-spacing:.04em;padding:0 .04em}
+  .word::before,.word::after{content:"";position:absolute;left:50%;width:34%;height:1px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,rgba(240,195,90,.8),transparent)}
+  .word::before{top:22%}
+  .sub{display:block;margin-top:.1em;font-family:"Aref Ruqaa","Lateef","Amiri","Traditional Arabic",serif;font-size:.5em;font-weight:700;letter-spacing:.06em;color:#f0c35a;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+  .circle:active .word{transform:translateZ(15px) scale(.96)}
+  .ripple{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:1.5px solid var(--gold);pointer-events:none;animation:rip .8s ease-out forwards}
+  .hint{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-size:14px;opacity:.6}
+  @keyframes rip{to{transform:scale(8);opacity:0}}
+  @media (prefers-reduced-motion: reduce){.circle{animation:none}.ripple{display:none}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="circle" id="c">
+    <canvas id="cv"></canvas>
+    <div class="word"><span class="txt">سبأ</span></div>
+  </div>
+  <div class="cap">انتظر</div>
+</div>
+<div class="hint">حرّك المؤشر أو اضغط على الدائرة</div>
+<script>
+  var c=document.getElementById("c"), cv=document.getElementById("cv"), ctx=cv.getContext("2d");
+  var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),stars=[],t0=performance.now();
+
+  function size(){
+    var r=cv.getBoundingClientRect();
+    W=r.width; H=r.height;
+    cv.width=W*DPR; cv.height=H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  // stars along two logarithmic spiral arms, plus scattered dust
+  function make(){
+    stars=[];
+    var N=380;
+    for(var i=0;i<N;i++){
+      var arm=i%2, u=Math.random();
+      var rad=Math.pow(u,0.7)*0.48;
+      var ang=arm*Math.PI + Math.log(rad*8+1)*2.6 + (Math.random()-0.5)*0.6;
+      if(i>N*0.85){ rad=Math.random()*0.48; ang=Math.random()*Math.PI*2; }
+      stars.push({r:rad, a:ang, s:0.35+Math.random()*1.1, b:0.35+Math.random()*0.65, warm:Math.random()<0.25});
+    }
+  }
+  // planet with tilted rings: 4 ring lines with 3 bands between them
+  function rings(cx,cy,R,t){
+    // planet body
+    var pg=ctx.createRadialGradient(cx-R*0.12,cy-R*0.12,R*0.05,cx,cy,R*0.5);
+    pg.addColorStop(0,"rgba(120,150,210,.55)");
+    pg.addColorStop(1,"rgba(20,40,80,.0)");
+    ctx.fillStyle=pg; ctx.beginPath(); ctx.arc(cx,cy,R*0.5,0,Math.PI*2); ctx.fill();
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(-0.42+Math.sin(t*0.35)*0.04);
+    var radii=[0.56,0.66,0.76,0.86];           // 4 ring lines
+    // soft bands between the lines (3 gaps)
+    for(var i=0;i<radii.length-1;i++){
+      ctx.fillStyle="rgba(150,185,255,.07)";
+      ctx.beginPath();
+      ctx.ellipse(0,0,R*radii[i+1],R*radii[i+1]*0.3,0,0,Math.PI*2);
+      ctx.ellipse(0,0,R*radii[i],R*radii[i]*0.3,0,0,Math.PI*2,true);
+      ctx.fill();
+    }
+    ctx.lineWidth=1.1;
+    for(var k=0;k<radii.length;k++){
+      ctx.strokeStyle="rgba(200,220,255,"+(0.5-k*0.08)+")";
+      ctx.beginPath(); ctx.ellipse(0,0,R*radii[k],R*radii[k]*0.3,0,0,Math.PI*2); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function frame(now){
+    var t=(now-t0)/1000;
+    ctx.clearRect(0,0,W,H);
+    var cx=W/2, cy=H/2, R=Math.min(W,H)/2;
+    // galaxy stars: inner stars spin faster (differential rotation)
+    for(var i=0;i<stars.length;i++){
+      var st=stars[i];
+      var spin=t*0.12/(0.3+st.r*1.6);
+      var a=st.a+spin;
+      var x=cx+Math.cos(a)*st.r*R*2, y=cy+Math.sin(a)*st.r*R*2*0.55;
+      var fade=Math.min(1,(R*0.98-st.r*R*2)/(R*0.2));
+      if(fade<=0) continue;
+      ctx.globalAlpha=st.b*Math.max(0,fade);
+      ctx.fillStyle=st.warm?"#ffd98a":"#dfe9ff";
+      ctx.beginPath(); ctx.arc(x,y,st.s,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    rings(cx,cy,R,t);
+    requestAnimationFrame(frame);
+  }
+  size(); make(); requestAnimationFrame(frame);
+  addEventListener("resize",size);
+
+  // tilt toward the pointer
+  c.addEventListener("pointermove",function(e){
+    var r=c.getBoundingClientRect();
+    var x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+    c.style.transform="rotateX("+((0.5-y)*16)+"deg) rotateY("+((x-0.5)*16)+"deg)";
+  });
+  c.addEventListener("pointerleave",function(){c.style.transform="";});
+  // click makes a ripple at the touch point
+  c.addEventListener("pointerdown",function(e){
+    var r=c.getBoundingClientRect(), d=document.createElement("div");
+    d.className="ripple";
+    d.style.left=(e.clientX-r.left)+"px";
+    d.style.top=(e.clientY-r.top)+"px";
+    c.appendChild(d);
+    setTimeout(function(){d.remove()},850);
+  });
+</script>
+</body>
+</html>
