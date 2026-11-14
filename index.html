@@ -218,7 +218,7 @@ body.hid::before{transform:translateY(-100%)}
 /* انتقال ضبابي ناعم */
 @keyframes blurIn{from{opacity:0;filter:blur(10px);transform:translateY(12px)}to{opacity:1;filter:blur(0);transform:none}}
 .blurin{animation:blurIn .7s ease both}
-body.moving .hero,body.moving section,body.moving .stats,body.moving .quick,body.moving footer{filter:url(#mb)}
+
 /* ===== سلاسة أثناء الحركة: نوقف الأشياء الثقيلة مؤقتًا ===== */
 html.mv header,html.mv body::before{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.92);background:color-mix(in srgb,var(--card) 92%,transparent)}
 html.mv .rv{transition:none!important}
@@ -243,7 +243,7 @@ html,body{overflow-x:clip}
 html.warm .rv{opacity:1!important;transform:none!important;transition:none!important}
 .logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;flex:none}
 
-  .adm-btn{position:fixed;top:10px;left:10px;z-index:200;background:#1f3a68;color:#f0c35a;border:1px solid #d4a72c;border-radius:10px;padding:7px 11px;font:inherit;font-size:13px;cursor:pointer}
+  .adm-btn{position:fixed;bottom:18px;right:18px;z-index:90;width:46px;height:46px;border-radius:50%;background:#1f3a68;color:#f0c35a;border:1px solid #d4a72c;padding:0;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.4)}
   .adm-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-start;justify-content:center;z-index:300;overflow:auto;padding:40px 12px}
   .adm-ov.on{display:flex}
   .adm-box{background:#101a2e;color:#f4f6ff;border-radius:14px;padding:18px;width:min(560px,100%);box-sizing:border-box;box-shadow:0 20px 60px rgba(0,0,0,.6)}
@@ -324,8 +324,6 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
     <h2>أخبار المدرسة</h2>
     <p class="sub">آخر الإعلانات والفعاليات.</p>
     <div class="grid">
-      <div class="card news"><div class="date">15 نوفمبر</div><div><h3>بداية الاختبارات</h3><p>تبدأ الاختبارات بتاريخ 15 نوفمبر، ونتمنى لجميع الطلاب التوفيق.</p></div></div>
-      <div class="card news"><div class="date">23 نوفمبر</div><div><h3>مشروع الصف الثالث الثانوي</h3><p>ينتهي مشروع الصف الثالث الثانوي بتاريخ 23 نوفمبر.</p></div></div>
     </div>
   </section>
 
@@ -544,7 +542,7 @@ function smoothTo(el,id){
   root.style.scrollBehavior="auto";root.classList.add("mv");
   document.querySelectorAll(".rv:not(.in)").forEach(function(x){x.classList.add("in")});
   function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
-  function setL(l){if(l===lvl)return;lvl=l;if(mb)mb.setAttribute("stdDeviation","0 "+l);if(l>0)body.classList.add("moving");else body.classList.remove("moving")}
+  function setL(l){return;lvl=l;if(0&&mb)mb.setAttribute("stdDeviation","0 "+l);if(l>0)body.classList.add("moving");else body.classList.remove("moving")}
   function done(){setL(0);root.style.scrollBehavior="";root.classList.remove("mv")}
   function step(t){
     if(tok!==smoothTok){done();return}
@@ -618,10 +616,10 @@ addEventListener("scroll",onS,{passive:true});onS();
     if(max<50)return;
     var N=Math.max(10,Math.min(24,Math.round(max/(innerHeight*0.7)))),i=0;
     root.style.scrollBehavior="auto";root.classList.add("mv","warm");
-    if(mb)mb.setAttribute("stdDeviation","0 2");
+    if(0&&mb)mb.setAttribute("stdDeviation","0 2");
     body.classList.add("moving");
     function fin(){
-      body.classList.remove("moving");if(mb)mb.setAttribute("stdDeviation","0 0");
+      body.classList.remove("moving");if(0&&mb)mb.setAttribute("stdDeviation","0 0");
       root.classList.remove("mv","warm");sc.scrollTop=0;root.style.scrollBehavior="";
       body.classList.remove("hid");
     }
@@ -679,7 +677,7 @@ exRender();
   document.querySelectorAll("#exams tr[data-d]").forEach(function(r){var x=r.getAttribute("data-d");if(x<t)r.classList.add("past");else if(x===t)r.classList.add("today")});})();
 render();
 </script>
-<button class="adm-btn" id="adm-open">🔐 دخول المدير</button>
+<button class="adm-btn" id="adm-open" title="دخول المدير" aria-label="دخول المدير">🔐</button>
 <div class="adm-ov" id="adm-ov"><div class="adm-box" id="adm-box"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
 <script>
