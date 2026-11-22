@@ -273,7 +273,7 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
   .adm-box{transition:transform .55s cubic-bezier(.2,.9,.3,1.06),opacity .35s ease-out}
   .adm-ov.min{background:rgba(0,0,0,0);pointer-events:none}
   .adm-ov.min .adm-box{transform:scale(.02);opacity:0;transition:transform .5s cubic-bezier(.55,0,.85,.35),opacity .45s ease-in}
-  .adm-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-18px -18px 8px;padding:14px 18px 10px;background:#101a2e;border-radius:14px 14px 0 0;border-bottom:1px solid #223}
+  .adm-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-18px -18px 8px;padding:14px 18px 10px;background:#101a2e;border-radius:14px 14px 0 0;border-bottom:1px solid #223}
   .adm-box button.adm-min{width:38px;height:38px;padding:0;border-radius:50%;background:#1f3a68;color:#f0c35a;border:1px solid #d4a72c;display:flex;align-items:center;justify-content:center}
   .adm-box button.adm-min svg{width:20px;height:20px}
   .adm-btn.has-panel::after{content:"";position:absolute;top:2px;right:2px;width:11px;height:11px;border-radius:50%;background:#1fd36b;box-shadow:0 0 0 2px #1f3a68}
@@ -325,6 +325,25 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 .rvw-more{margin:14px auto 0;display:block}
 .rvw-more[hidden]{display:none}
 @media (max-width:640px){.rvw{grid-template-columns:1fr}}
+
+.adm-arrow{position:fixed;left:8px;top:calc(env(safe-area-inset-top,0px) + clamp(150px,22vh,230px));z-index:400;width:40px;height:40px;border-radius:50%;background:#1f3a68;color:#f0c35a;border:1px solid #d4a72c;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;opacity:0;pointer-events:none;transform:scale(.6);transition:opacity .25s,transform .3s cubic-bezier(.3,1.4,.5,1);box-shadow:0 6px 16px rgba(0,0,0,.35);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.adm-arrow.show{opacity:1;pointer-events:auto;transform:none}
+.adm-arrow svg{width:22px;height:22px;transition:transform .4s cubic-bezier(.3,1.4,.5,1)}
+.adm-arrow.min svg{transform:rotate(-90deg)}
+.adm-arrow .ring{position:absolute;inset:-8px;border-radius:50%;border:2px dashed rgba(240,195,90,.8);pointer-events:none;transform:rotate(var(--rot,0deg))}
+.adm-arrow .ring::after{content:"";position:absolute;top:-6px;left:50%;margin-left:-5px;width:10px;height:10px;border-radius:50%;background:#f0c35a;box-shadow:0 0 10px 2px rgba(240,195,90,.85)}
+.adm-arrow:active{scale:.92}
+@media (min-width:641px){.adm-arrow{left:max(8px,calc(50% - 280px - 62px))}}
+@media (max-width:640px){.adm-ov{padding-left:56px;padding-right:10px}.adm-box button.adm-f{font-size:12px;padding:8px 3px}}
+.rvw-lbl{font-weight:700;color:var(--ink);font-size:15px}
+.rvw-lbl b{color:#d6336c}
+.dlpill{position:fixed;left:76px;right:76px;bottom:22px;margin:0 auto;max-width:360px;z-index:96;background:#14213d;color:#fff;border-radius:14px;padding:8px 14px 10px;font-size:13px;line-height:1.5;text-align:center;box-shadow:0 10px 26px rgba(20,33,61,.35);opacity:0;transform:translateY(16px) scale(.96);pointer-events:none;transition:opacity .3s,transform .35s cubic-bezier(.3,1.3,.5,1);cursor:pointer}
+.dlpill.on{opacity:1;transform:none;pointer-events:auto}
+.dlpill .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dlpill .b{height:4px;background:rgba(255,255,255,.2);border-radius:4px;margin-top:6px;overflow:hidden}
+.dlpill .b i{display:block;height:100%;width:0;background:#f5a623;border-radius:4px;transition:width .25s}
+.dlpill.ok{background:#1f8a4c}.dlpill.ok .b i{background:#fff}
+.dlpill.err{background:#b42339}
 </style>
 </head>
 <body>
@@ -441,7 +460,8 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
       <div class="card rvw-sum"><div class="rvw-avg" id="rv-avg">–</div><div id="rv-avgstars"></div><div class="rvw-cnt" id="rv-cnt">جارٍ التحميل…</div></div>
       <div class="card rvw-form">
         <div class="rvw-pick" id="rv-pick" role="group" aria-label="التقييم من 6 نجوم"></div>
-        <input id="rv-name" maxlength="30" placeholder="سجّل اسمك" autocomplete="name">
+        <label class="rvw-lbl" for="rv-name">اكتب اسمك <b>*</b></label>
+        <input id="rv-name" maxlength="30" placeholder="الاسم الكريم" autocomplete="name" required>
         <textarea id="rv-text" maxlength="300" rows="3" placeholder="اكتب رأيك (اختياري)"></textarea>
         <button class="btn" id="rv-send" type="button">⭐ أرسل تقييمي</button>
         <p class="rvw-msg" id="rv-msg" aria-live="polite"></p>
@@ -696,33 +716,79 @@ function dlLink(b){
   if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
   return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'';
 }
-document.addEventListener("click",function(e){
-  var a=e.target.closest("a.dlp");
-  if(!a)return;
-  e.preventDefault();
-  if(a.getAttribute("aria-busy")==="true")return;
-  var parts=a.getAttribute("data-parts").split("|"),name=a.getAttribute("data-name"),label=a.getAttribute("data-label")||"تحميل الكتاب",got=[],tot=[];
-  parts.forEach(function(_,i){got[i]=0;tot[i]=0});
+/* ===== مدير التحميل: يستمر حتى لو انتقل الزائر بين الصفوف، ويعيده لمكان الكتب ===== */
+var DL={};
+function dlKey(a){return a.getAttribute("data-parts")+"|"+a.getAttribute("data-name")}
+function dlShort(n){return String(n).replace(/\.pdf$/i,"")}
+function dlPct(s){var T=s.tot.reduce(function(p,c){return p+c},0),G=s.got.reduce(function(p,c){return p+c},0);return T?Math.min(99,Math.round(G/T*100)):0}
+function dlPaint(a){
+  var s=DL[dlKey(a)],label=a.getAttribute("data-label")||"تحميل الكتاب";
+  if(!s){ if(a.getAttribute("aria-busy")==="true"){a.removeAttribute("aria-busy");a.style.pointerEvents="";a.classList.remove("done");a.style.removeProperty("--p");a.textContent=label} return }
   a.setAttribute("aria-busy","true");a.style.pointerEvents="none";
-  function sum(x){return x.reduce(function(p,c){return p+c},0)}
-  function show(){var T=sum(tot),G=sum(got),p=T?Math.min(99,Math.round(G/T*100)):0;a.style.setProperty("--p",p+"%");a.textContent=T?"جارٍ التحميل "+p+"%":"جارٍ التحميل..."}
-  function fin(t,ok){a.style.removeProperty("--p");a.textContent=t;if(ok)a.classList.add("done");setTimeout(function(){a.textContent=label;a.classList.remove("done");a.removeAttribute("aria-busy");a.style.pointerEvents=""},2500)}
-  show();
+  if(s.st==="run"){a.style.setProperty("--p",s.p+"%");a.textContent=s.p?"جارٍ التحميل "+s.p+"%":"جارٍ التحميل..."}
+  else{a.style.removeProperty("--p");a.textContent=s.st==="done"?"تم التحميل ✓":"تعذّر التحميل، حاول مرة ثانية";a.classList.toggle("done",s.st==="done")}
+}
+var dlPillEl=null;
+function dlPill(){
+  if(!dlPillEl){
+    dlPillEl=document.createElement("div");dlPillEl.className="dlpill";dlPillEl.setAttribute("role","status");
+    dlPillEl.innerHTML='<div class="t"></div><div class="b"><i></i></div>';document.body.appendChild(dlPillEl);
+    dlPillEl.addEventListener("click",function(){var b=$("books"),hd=document.querySelector("header");if(b)window.scrollTo({top:Math.max(0,b.getBoundingClientRect().top+window.pageYOffset-((hd?hd.offsetHeight:60)+8)),behavior:"smooth"})});
+  }
+  var keys=Object.keys(DL),run=keys.filter(function(k){return DL[k].st==="run"}),t=dlPillEl.querySelector(".t"),bar=dlPillEl.querySelector(".b i");
+  if(!keys.length){dlPillEl.classList.remove("on");return}
+  if(run.length){
+    var p=Math.round(run.reduce(function(s,k){return s+DL[k].p},0)/run.length);
+    t.textContent=run.length>1?"⬇️ جارٍ تحميل "+run.length+" كتب… "+p+"%":"⬇️ جارٍ تحميل «"+dlShort(DL[run[0]].name)+"» "+p+"%";
+    bar.style.width=p+"%";dlPillEl.className="dlpill on";
+  }else{
+    var last=DL[keys[keys.length-1]];
+    t.textContent=(last.st==="done"?"✓ تم تحميل «":"تعذّر تحميل «")+dlShort(last.name)+"»";
+    bar.style.width=last.st==="done"?"100%":"0%";dlPillEl.className="dlpill on "+(last.st==="done"?"ok":"err");
+  }
+}
+function dlPaintAll(){document.querySelectorAll("a.dlp").forEach(dlPaint);dlPill()}
+function dlSave(){try{sessionStorage.setItem("rb_ret",JSON.stringify({cur:cur,trk:trk,y:window.pageYOffset,t:Date.now()}))}catch(e){}}
+function dlFinish(key,st){var s=DL[key];if(!s)return;s.st=st;dlPaintAll();setTimeout(function(){delete DL[key];dlPaintAll()},st==="done"?3000:3500)}
+function dlStart(a){
+  var key=dlKey(a);if(DL[key]&&DL[key].st==="run")return;
+  var parts=a.getAttribute("data-parts").split("|"),name=a.getAttribute("data-name");
+  var s=DL[key]={st:"run",p:0,name:name,got:parts.map(function(){return 0}),tot:parts.map(function(){return 0})};
+  dlSave();dlPaintAll();
   Promise.all(parts.map(function(u,i){
     return fetch(u).then(function(r){
       if(!r.ok)throw new Error("http "+r.status);
-      tot[i]=+r.headers.get("content-length")||0;
+      s.tot[i]=+r.headers.get("content-length")||0;
       if(!r.body||!r.body.getReader)return r.blob();
       var rd=r.body.getReader(),ch=[];
-      return (function pump(){return rd.read().then(function(x){if(x.done)return new Blob(ch);ch.push(x.value);got[i]+=x.value.length;show();return pump()})})();
+      return (function pump(){return rd.read().then(function(x){if(x.done)return new Blob(ch);ch.push(x.value);s.got[i]+=x.value.length;var p=dlPct(s);if(p!==s.p){s.p=p;dlPaintAll()}return pump()})})();
     });
   })).then(function(bl){
     var url=URL.createObjectURL(new Blob(bl,{type:"application/pdf"})),d=document.createElement("a");
+    dlSave();
     d.href=url;d.download=name;document.body.appendChild(d);d.click();d.remove();
     setTimeout(function(){URL.revokeObjectURL(url)},120000);
-    fin("تم التحميل ✓",true);
-  }).catch(function(){fin("تعذّر التحميل، حاول مرة ثانية")});
-});
+    dlFinish(key,"done");
+  }).catch(function(){dlFinish(key,"err")});
+}
+document.addEventListener("click",function(e){var a=e.target.closest("a.dlp");if(!a)return;e.preventDefault();dlStart(a)});
+render=(function(r){return function(){r.apply(this,arguments);dlPaintAll()}})(render);
+/* بعد فتح الكتاب في آيفون: يرجع الزائر إلى نفس الصف ونفس مكان الكتب بدل أعلى الصفحة */
+var rbSt=null;
+function rbRestore(force){
+  if(!rbSt){
+    try{rbSt=JSON.parse(sessionStorage.getItem("rb_ret")||"null")}catch(e){}
+    if(!rbSt||Date.now()-rbSt.t>1200000){rbSt=null;return}
+    try{sessionStorage.removeItem("rb_ret")}catch(e){}
+    if(rbSt.cur&&GRADES.some(function(g){return g.id===rbSt.cur})&&(rbSt.cur!==cur||(rbSt.trk||null)!==trk)){cur=rbSt.cur;trk=rbSt.trk||null;render()}
+  }
+  if(!force&&window.pageYOffset>40)return;
+  var rt=document.documentElement,b=$("books"),hd=document.querySelector("header");
+  var y=rbSt.y>40?rbSt.y:(b?b.getBoundingClientRect().top+window.pageYOffset-((hd?hd.offsetHeight:60)+8):0);
+  rt.style.scrollBehavior="auto";window.scrollTo(0,y);setTimeout(function(){rt.style.scrollBehavior=""},80);
+}
+window.addEventListener("load",function(){setTimeout(rbRestore,2400);setTimeout(rbRestore,3800)});
+window.addEventListener("pageshow",function(e){if(e.persisted)setTimeout(function(){rbRestore(true)},60)});
 var lastY=0;
 function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10);var y=h.scrollTop;if(y>90&&y>lastY+4)document.body.classList.add("hid");else if(y<lastY-4||y<=90)document.body.classList.remove("hid");lastY=y}
 addEventListener("scroll",onS,{passive:true});onS();
@@ -940,8 +1006,8 @@ async function refreshAdmin(){
   admData.news=n.data||[]; admData.exams=e.data||[]; admData.reviews=rr.data||[];
 }
 var minimized=false;
-function showModal(h){box.innerHTML=h;if(!minimized)ov.classList.add("on")}
-function closeModal(){ov.classList.remove("on","min");minimized=false;var b=document.getElementById("adm-open");if(b)b.classList.remove("has-panel")}
+function showModal(h){box.innerHTML=h;if(!minimized)ov.classList.add("on");arrowSync()}
+function closeModal(){ov.classList.remove("on","min");minimized=false;var b=document.getElementById("adm-open");if(b)b.classList.remove("has-panel");arrowSync()}
 function msg(t){var m=document.getElementById("adm-msg");if(m)m.textContent=t}
 
 function loginHTML(){
@@ -985,7 +1051,7 @@ function revSection(){
 function renderRevs(){var e=document.getElementById("adm-rvsec");if(e)e.innerHTML=revSection()}
 function panelHTML(){
   var news=admData.news.map(function(n){return '<div class="adm-item"><span>'+esc(n.title)+'</span><button class="d" data-delnews="'+esc(n.id)+'">حذف</button></div>'}).join("")||'<div class="adm-msg">لا توجد أخبار</div>';
-  return '<div class="adm-top"><h3 style="margin:0;color:#f0c35a">لوحة التعديل</h3><button type="button" class="adm-min" id="adm-min" aria-label="تصغير اللوحة" title="تصغير اللوحة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button></div>'+
+  return '<div class="adm-top"><h3 style="margin:0;color:#f0c35a">لوحة التعديل</h3></div>'+
   '<div class="adm-h">إضافة خبر</div>'+
   '<input id="adm-nt" placeholder="عنوان الخبر">'+
   '<textarea id="adm-nb" rows="3" placeholder="نص الخبر"></textarea>'+
@@ -996,18 +1062,31 @@ function panelHTML(){
   '<div class="adm-msg" id="adm-msg"></div>'+
   '<button class="p" style="background:#334;margin-top:12px" id="adm-logout">تسجيل الخروج</button>';
 }
+var arrowBtn=document.createElement("button");
+arrowBtn.id="adm-arrow";arrowBtn.type="button";arrowBtn.className="adm-arrow";arrowBtn.setAttribute("aria-label","تصغير لوحة التعديل أو فتحها");
+arrowBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+document.body.appendChild(arrowBtn);
+(function(){
+  var ring=document.createElement("span");ring.className="ring";arrowBtn.appendChild(ring);
+  var tgt=0,cur=0,raf=0;
+  function tick(){cur+=(tgt-cur)*0.16;arrowBtn.style.setProperty("--rot",cur.toFixed(1)+"deg");raf=Math.abs(tgt-cur)>0.2?requestAnimationFrame(tick):0}
+  function kick(){tgt=(window.pageYOffset+(ov.scrollTop||0))*0.6;if(!raf)raf=requestAnimationFrame(tick)}
+  window.addEventListener("scroll",kick,{passive:true});ov.addEventListener("scroll",kick,{passive:true});
+})();
+function arrowSync(){arrowBtn.classList.toggle("show",ov.classList.contains("on")||minimized);arrowBtn.classList.toggle("min",minimized)}
+arrowBtn.addEventListener("click",function(){ if(minimized) restoreAdmin(); else minimizeAdmin(); });
 function admToast(t){var e=document.getElementById("adm-toast");if(!e){e=document.createElement("div");e.id="adm-toast";e.className="adm-toast";document.body.appendChild(e)}e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on")},2800)}
 function admOrigin(){var r=box.getBoundingClientRect(),c=document.getElementById("adm-open").getBoundingClientRect();box.style.transformOrigin=(c.left+c.width/2-r.left)+"px "+(c.top+c.height/2-r.top)+"px"}
 function minimizeAdmin(){
   var btn=document.getElementById("adm-open");
-  admOrigin(); ov.classList.add("min"); minimized=true; btn.classList.add("has-panel");
+  admOrigin(); ov.classList.add("min"); minimized=true; btn.classList.add("has-panel"); arrowSync();
   setTimeout(function(){ if(minimized){ov.classList.remove("on")} },520);
   if(xG&&typeof exRender==="function"){
     exCur=xG; exTrk=xT||null; exRender();
     var ex=document.getElementById("exams"),hd=document.querySelector("header");
     if(ex)window.scrollTo({top:Math.max(0,ex.getBoundingClientRect().top+window.pageYOffset-((hd?hd.offsetHeight:60)+8)),behavior:"smooth"});
   }
-  admToast("تم تصغير اللوحة — اضغط 🔐 للرجوع");
+  admToast("تم تصغير اللوحة — اضغط السهم أو 🔐 للرجوع");
 }
 function admGrow(){
   box.style.transition="none"; ov.classList.remove("min"); admOrigin(); ov.classList.add("min"); void box.offsetWidth; box.style.transition="";
@@ -1018,7 +1097,7 @@ function restoreAdmin(){
   var btn=document.getElementById("adm-open");
   box.style.transition="none"; ov.classList.remove("min"); ov.classList.add("on");
   admOrigin(); ov.classList.add("min"); void box.offsetWidth; box.style.transition="";
-  minimized=false; btn.classList.remove("has-panel");
+  minimized=false; btn.classList.remove("has-panel"); arrowSync();
   requestAnimationFrame(function(){requestAnimationFrame(function(){ov.classList.remove("min")})});
 }
 async function openAdmin(){
