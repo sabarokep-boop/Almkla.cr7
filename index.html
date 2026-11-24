@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d3f9e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1426" media="(prefers-color-scheme: dark)">
 <title>مجمع سبأ روكب للبنين</title>
 <meta name="description" content="مجمع سبأ روكب للبنين: الأساسي والثانوي. الكتب المدرسية والأخبار وبدء الدوام والاختبارات والتسجيل.">
 <link rel="canonical" href="https://sabarokep-boop.github.io/">
@@ -96,6 +98,7 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);font-size:15px}
 th{background:var(--soft);color:var(--brand)}
 .tw{overflow-x:auto}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 footer{margin-top:50px;background:#0e1f4d;color:#e5efec;padding:28px 0;text-align:center;font-size:14px}
 nav{min-width:0}
 .cta{background:var(--brand2);color:#1c1405;padding:7px 16px;border-radius:24px;font-weight:700;text-decoration:none;font-size:15px;white-space:nowrap}
@@ -206,7 +209,7 @@ tr.today td{background:var(--soft);font-weight:700;color:var(--brand)}
  .step b{font-size:14px}
  .step small{font-size:12px}
  th,td{padding:8px;font-size:13px}
- .form input,.form select{padding:10px 12px;font-size:15px}
+ .form input,.form select{padding:10px 12px;font-size:16px}
  .btn{font-size:15px;padding:9px 20px}
  .fab{width:46px;height:46px;font-size:22px;left:12px}
  footer{padding:20px 0;font-size:12px}
@@ -337,7 +340,12 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 .adm-arrow .ring{position:absolute;inset:-7px;border-radius:50%;border:2px dashed rgba(240,195,90,.8);pointer-events:none;transform:rotate(var(--rot,0deg))}
 .adm-arrow .ring::after{content:"";position:absolute;top:-6px;left:50%;margin-left:-5px;width:10px;height:10px;border-radius:50%;background:#f0c35a;box-shadow:0 0 10px 2px rgba(240,195,90,.85)}
 @media (max-width:640px){.adm-box button.adm-f{font-size:12px;padding:8px 3px}}
-.rvw-lbl{font-weight:700;color:var(--ink);font-size:15px}
+.rvw-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.rvw-chips button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer;transition:transform .15s,background .2s,color .2s}
+.rvw-chips button:active{transform:scale(.93)}
+.rvw-chips button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.rvw-count{font-size:12px;color:var(--mute);direction:ltr;text-align:left;margin-top:-4px}
+#share-site{margin:0 auto 14px;display:inline-flex}
 .rvw-lbl b{color:#d6336c}
 .dlpill{position:fixed;left:76px;right:76px;bottom:22px;margin:0 auto;max-width:360px;z-index:96;background:#14213d;color:#fff;border-radius:14px;padding:8px 14px 10px;font-size:13px;line-height:1.5;text-align:center;box-shadow:0 10px 26px rgba(20,33,61,.35);opacity:0;transform:translateY(16px) scale(.96);pointer-events:none;transition:opacity .3s,transform .35s cubic-bezier(.3,1.3,.5,1);cursor:pointer}
 .dlpill.on{opacity:1;transform:none;pointer-events:auto}
@@ -457,14 +465,14 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 
   <section id="reviews">
     <h2>آراء وتقييمات الزوار</h2>
-    <p class="sub">شاركنا تقييمك لمجمع سبأ روكب، وسيظهر لكل الزوار. نرجو الالتزام بالأدب في الكتابة.</p>
+    <p class="sub">اكتب ملاحظتك، وإذا في تعديلات تبغانا نعدّلها أو أفكار نضيفها للموقع اكتبها لنا 👇</p>
     <div class="rvw">
       <div class="card rvw-sum"><div class="rvw-avg" id="rv-avg">–</div><div id="rv-avgstars"></div><div class="rvw-cnt" id="rv-cnt">جارٍ التحميل…</div></div>
       <div class="card rvw-form">
         <div class="rvw-pick" id="rv-pick" role="group" aria-label="التقييم من 6 نجوم"></div>
-        <label class="rvw-lbl" for="rv-name">اكتب اسمك <b>*</b></label>
-        <input id="rv-name" maxlength="30" placeholder="الاسم الكريم" autocomplete="name" required>
-        <textarea id="rv-text" maxlength="300" rows="3" placeholder="اكتب رأيك (اختياري)"></textarea>
+        <div class="rvw-chips" id="rv-chips"><button type="button" data-p="اقتراح: ">💡 اقتراح</button><button type="button" data-p="تعديل مطلوب: ">🛠️ تعديل مطلوب</button><button type="button" data-p="شكر: ">❤️ شكر</button></div>
+        <textarea id="rv-text" maxlength="300" rows="3" placeholder="اكتب ملاحظتك أو اقتراحك هنا…"></textarea>
+        <div class="rvw-count" id="rv-count">0 / 300</div>
         <button class="btn" id="rv-send" type="button">⭐ أرسل تقييمي</button>
         <p class="rvw-msg" id="rv-msg" aria-live="polite"></p>
       </div>
@@ -475,7 +483,7 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 </div>
 
 <a class="fab" id="fab" href="#register" aria-label="تواصل معنا">💬</a>
-<footer><div class="wrap">© 2026 مجمع سبأ روكب للبنين<br>حقوق الطبع محفوظة: محمد سرور بامزعب</div></footer>
+<footer><div class="wrap"><button class="btn" id="share-site" type="button">🔗 شارك الموقع</button><br>© 2026 مجمع سبأ روكب للبنين<br>حقوق الطبع محفوظة: محمد سرور بامزعب</div></footer>
 
 <script>
 /* إعادة التحميل ترجع الصفحة من البداية */
@@ -791,6 +799,19 @@ function rbRestore(force){
 }
 window.addEventListener("load",function(){setTimeout(rbRestore,2400);setTimeout(rbRestore,3800)});
 window.addEventListener("pageshow",function(e){if(e.persisted)setTimeout(function(){rbRestore(true)},60)});
+
+/* ===== مشاركة الموقع ===== */
+(function(){
+  var b=document.getElementById("share-site"); if(!b) return;
+  function toast(m){var e=document.getElementById("site-toast");if(!e){e=document.createElement("div");e.id="site-toast";e.className="adm-toast";document.body.appendChild(e)}e.textContent=m;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on")},2600)}
+  b.addEventListener("click",async function(){
+    var c=document.querySelector('link[rel="canonical"]'),url=(c&&c.href)||location.href;
+    var d={title:"مجمع سبأ روكب للبنين",text:"الكتب المدرسية والأخبار والاختبارات في مجمع سبأ روكب للبنين",url:url};
+    try{ if(navigator.share){ await navigator.share(d); return } }catch(e){ if(e&&e.name==="AbortError") return }
+    try{ await navigator.clipboard.writeText(url); toast("تم نسخ رابط الموقع ✅") }
+    catch(e){ window.open("https://wa.me/?text="+encodeURIComponent(d.text+" "+url),"_blank") }
+  });
+})();
 var lastY=0;
 function onS(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+"%";document.querySelector("header").classList.toggle("sc",h.scrollTop>10);var y=h.scrollTop;if(y>90&&y>lastY+4)document.body.classList.add("hid");else if(y<lastY-4||y<=90)document.body.classList.remove("hid");lastY=y}
 addEventListener("scroll",onS,{passive:true});onS();
@@ -972,29 +993,45 @@ async function loadReviews(){
     rvPick=+b.dataset.v; paint(); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
   });
   document.getElementById("rv-more").addEventListener("click",function(){rvShown+=8;rvRender()});
+  var rvTx=document.getElementById("rv-text"),rvCnt=document.getElementById("rv-count"),rvChips=document.getElementById("rv-chips");
+  function rvCount(){rvCnt.textContent=rvTx.value.length+" / 300"}
+  rvTx.addEventListener("input",rvCount);
+  rvChips.addEventListener("click",function(e){
+    var c=e.target.closest("button"); if(!c) return;
+    var base=rvTx.value.replace(/^(اقتراح|تعديل مطلوب|شكر): ?/,"");
+    rvTx.value=c.dataset.p+base; rvCount();
+    rvChips.querySelectorAll("button").forEach(function(x){x.classList.toggle("on",x===c)});
+    rvTx.focus(); try{rvTx.setSelectionRange(rvTx.value.length,rvTx.value.length)}catch(err){}
+  });
   document.getElementById("rv-send").addEventListener("click",async function(){
-    var btn=this,nm=document.getElementById("rv-name"),tx=document.getElementById("rv-text");
-    var name=nm.value.trim().slice(0,30),text=tx.value.trim().slice(0,300);
+    var btn=this,tx=rvTx,text=tx.value.trim().slice(0,300);
     if(!rvPick){rvMsg("اختر عدد النجوم أولًا ⭐","err");return}
-    if(name.length<2){rvMsg("سجّل اسمك أولًا","err");nm.classList.remove("shake");void nm.offsetWidth;nm.classList.add("shake");nm.focus();return}
-    if(rvBad(name)||rvBad(text)){
-      rvMsg("عذرًا، لا يمكن إرسال تقييم يحتوي على ألفاظ مسيئة. اكتب رأيك بأدب 🌹","err");
-      [nm,tx].forEach(function(x){x.classList.remove("shake");void x.offsetWidth;x.classList.add("shake")});
+    if(rvBad(text)){
+      rvMsg("عذرًا، لا يمكن إرسال ملاحظة تحتوي على ألفاظ مسيئة. اكتب ملاحظتك بأدب 🌹","err");
+      tx.classList.remove("shake");void tx.offsetWidth;tx.classList.add("shake");
       return;
     }
-    if(/https?:|www\.|\.(com|net|org|info|ly|me)\b/i.test(name+" "+text)){rvMsg("لا يمكن إضافة روابط في التقييم","err");return}
+    if(/https?:|www\.|\.(com|net|org|info|ly|me)\b/i.test(text)){rvMsg("لا يمكن إضافة روابط في الملاحظة","err");return}
     var last=0;try{last=+localStorage.getItem("rv_t")||0}catch(e){}
     if(Date.now()-last<45000){rvMsg("انتظر قليلًا قبل إرسال تقييم آخر","err");return}
     btn.disabled=true; rvMsg("جارٍ الإرسال…");
-    var r=await sb.from("reviews").insert({name:name||"زائر",stars:rvPick,comment:text});
+    var r=await sb.from("reviews").insert({name:"زائر",stars:rvPick,comment:text});
     btn.disabled=false;
     if(r.error){rvMsg("تعذّر إرسال التقييم الآن، حاول لاحقًا","err");return}
     try{localStorage.setItem("rv_t",String(Date.now()))}catch(e){}
-    nm.value="";tx.value="";rvPick=0;paint();
+    tx.value="";rvCount();rvPick=0;paint();rvChips.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});
     rvMsg("شكرًا لك! ظهر تقييمك للجميع ✅","ok");
     await loadReviews();
     var f=rvAll[0]; rvNew=(f&&Date.now()-new Date(f.created_at)<120000)?f.id:null; rvRender();
   });
+  /* يحدّث التقييمات تلقائيًا كل 90 ثانية (فقط إذا تغيّرت) */
+  setInterval(async function(){
+    if(document.hidden) return;
+    var r=await sb.from("reviews").select("id,name,stars,comment,created_at").order("created_at",{ascending:false}).limit(200);
+    if(r.error||!r.data) return;
+    var sig=function(a){return a.length+":"+(a[0]?a[0].id:0)};
+    if(sig(r.data)!==sig(rvAll)){rvAll=r.data;rvRender()}
+  },90000);
 })();
 loadNews(); loadExams(); loadReviews();
 
