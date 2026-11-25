@@ -322,13 +322,23 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 .rvw-msg.err{color:#d6336c}.rvw-msg.ok{color:#1f8a4c}
 @keyframes shk{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .shake{animation:shk .35s}
-.rvw-list{display:grid;gap:10px;margin-top:14px}
+.rvw-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:14px}
 .rvw-item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;animation:pop .4s backwards}
 .rvw-item.new{border-color:#f5a623;box-shadow:0 0 0 3px rgba(245,166,35,.25)}
 .rvw-item .h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .rvw-item b{color:var(--ink)}
 .rvw-item .stars{font-size:16px}
 .rvw-item small{color:var(--mute)}
+.rvw-item.mine{border-color:var(--brand)}
+.rvw-item .top{display:flex;align-items:center;gap:10px}
+.rvw-item .av{flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff;background:hsl(var(--h,220) 52% 42%)}
+.rvw-item .who{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.4}
+.rvw-item .who b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rvw-item .top .stars{font-size:15px;flex:none}
+.rvw-item .mine-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+.rvw-badge{font-size:12px;color:var(--brand);background:var(--soft);padding:2px 10px;border-radius:999px}
+.rvw-del{border:0;background:none;color:#d6336c;font:inherit;font-size:13px;cursor:pointer;padding:6px 8px;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.rvw-del:disabled{opacity:.5}
 .rvw-item p{margin:6px 0 0;color:var(--ink);font-size:15px;line-height:1.7;overflow-wrap:anywhere}
 .rvw-more{margin:14px auto 0;display:block}
 .rvw-more[hidden]{display:none}
@@ -470,6 +480,7 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
       <div class="card rvw-sum"><div class="rvw-avg" id="rv-avg">–</div><div id="rv-avgstars"></div><div class="rvw-cnt" id="rv-cnt">جارٍ التحميل…</div></div>
       <div class="card rvw-form">
         <div class="rvw-pick" id="rv-pick" role="group" aria-label="التقييم من 6 نجوم"></div>
+        <input id="rv-name" maxlength="30" placeholder="اسمك (اختياري)" autocomplete="name">
         <div class="rvw-chips" id="rv-chips"><button type="button" data-p="اقتراح: ">💡 اقتراح</button><button type="button" data-p="تعديل مطلوب: ">🛠️ تعديل مطلوب</button><button type="button" data-p="شكر: ">❤️ شكر</button></div>
         <textarea id="rv-text" maxlength="300" rows="3" placeholder="اكتب ملاحظتك أو اقتراحك هنا…"></textarea>
         <div class="rvw-count" id="rv-count">0 / 300</div>
@@ -940,8 +951,12 @@ async function loadExams(){
 
 /* ---------- public: ratings & reviews (6 stars) ---------- */
 var RV_N=6, rvAll=[], rvShown=8, rvNew=null, rvPick=0;
-var RV_BAD_RAW="غبي حقير تافه سافل نذل وغد لعين ملعون احمق اهبل حثاله لقيط كلب حمار حيوانك خنزير قرد تيس جحش بهيم بهيمه عاهر عاهره عاهرات شرموط شرموطه شرموطات قحبه قحاب زاني زانيه زانيات منيوك منيك نيك ناك ينيك نايك متناك متناكه زب كس كسم كسمك كسختك طيز خول خولات لوطي ديوث قواد قوادة عرص عرصه فاجره جزمه خراء سكس fuck fuk shit bitch asshole dick pussy cunt slut whore bastard nigger nigga faggot motherfucker retard porn xxx sex";
-var RV_PHR_RAW=["يا كلب","يا حمار","يا حيوان","يا خنزير","يا قرد","يا تيس","ابن الكلب","كلب ابن كلب","ابن الحرام","ولد الحرام","ابن العاهره","ابن الزانيه","ابن الشرموطه","ابن الجزمه","ابن زنا","ولد زنا","ام الكلب","يلعن ابوك","يلعن امك","يلعن دينك","يلعن ابو"];
+var RV_BAD_RAW="غبي حقير تافه سافل نذل وغد لعين ملعون احمق اهبل معتوه وضيع خسيس حثاله لقيط كلب حمار حيوانك حيوانه خنزير قرد تيس جحش بهيم بهيمه اخرس "+
+ "اخدام زنجي زنجيه زنوج دحباش دحابشه رافضي روافض ناصبي نواصب "+
+ "عاهر عاهره عاهرات شرموط شرموطه شرموطات قحبه قحاب زاني زانيه زانيات منيوك منيك نيك ناك ينيك نايك متناك متناكه زب زبك زبي زبر كس كسم كسمك كسك كسها كسكم كسختك طيز بزاز خول خولات لوطي ديوث قواد قوادة فاجره خراء سكس "+
+ "اقتلك اقتلكم اقتلهم اذبحك اذبحكم اذبحهم قتلتك "+
+ "fuck fuk shit bitch asshole dick pussy cunt slut whore bastard nigger nigga chink gook spic kike fag faggot tranny coon paki raghead towelhead retard motherfucker idiot moron dumbass stupid pedo pedophile rapist porn xxx sex kys sharmouta sharmota sharmoota manyak manyouk kosomak ahbal kalb hmar ayri ayre";
+var RV_PHR_RAW=["يا كلب","يا حمار","يا حيوان","يا خنزير","يا قرد","يا تيس","ابن الكلب","بنت الكلب","كلب ابن كلب","ابن الحرام","ولد الحرام","ابن حرام","ولد حرام","ابن العاهره","ابن الزانيه","ابن الشرموطه","ابن قحبه","ولد قحبه","ابن متناكه","ابن الجزمه","ابن زنا","ولد زنا","ام الكلب","يلعن ابوك","يلعن امك","يلعن دينك","يلعن ربك","يلعن الدين","يلعن اهلك","يلعن اصلك","يلعن ابو","كس امك","كس اختك","يا كافر","يا يهودي","يا نصراني","يا مجوسي","يا رافضي","يا ناصبي","يا اسود","يا زنجي","عبد اسود","kill yourself","kill you","go to hell","shut up","son of a bitch"];
 function rvNz(s){return String(s||"").toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/@/g,"a").replace(/\$/g,"s").replace(/0/g,"o").replace(/1/g,"i").replace(/3/g,"e").replace(/5/g,"s").replace(/(.)\1+/g,"$1")}
 var RV_BAD={}; RV_BAD_RAW.split(" ").forEach(function(w){if(w)RV_BAD[rvNz(w)]=1});
 var RV_PH=RV_PHR_RAW.map(rvNz);
@@ -949,6 +964,7 @@ function rvTok(s){return rvNz(s).split(/[^\u0621-\u064Aa-z]+/).filter(Boolean)}
 function rvJoin(toks){var out=[],run="",cnt=0;toks.forEach(function(t){if(t.length===1){run+=t;cnt++}else{if(cnt>=2)out.push(run);run="";cnt=0}});if(cnt>=2)out.push(run);return out}
 function rvVar(t){
   var v=[t],a=t.replace(/^ال/,"");v.push(a);
+  if(t.length>4&&t.slice(0,2)==="يا")v.push(t.slice(2));
   ["و","ف","ب","ل","ك","س"].forEach(function(p){if(a.length>3&&a.charAt(0)===p)v.push(a.slice(1));if(t.length>3&&t.charAt(0)===p)v.push(t.slice(1))});
   var sfx=["ك","ه","ي","ها","هم","كم","ون","ين","ان","ات","ا","s","es","ed","ing","er","y"];
   v.slice().forEach(function(w){sfx.forEach(function(s){if(w.length>s.length+2&&w.slice(-s.length)===s)v.push(w.slice(0,-s.length))})});
@@ -965,13 +981,24 @@ function rvBad(s){
 function rvStars(v){return '<span class="stars" style="--w:'+Math.max(0,Math.min(100,v/RV_N*100)).toFixed(1)+'%" role="img" aria-label="'+(+v).toFixed(1)+' من '+RV_N+'">★★★★★★<i>★★★★★★</i></span>'}
 function rvDate(iso){var d=new Date(iso);return isNaN(d)?"":d.getDate()+" "+MONTHS[d.getMonth()]+" "+d.getFullYear()}
 function rvMsg(t,k){var m=document.getElementById("rv-msg");if(m){m.textContent=t;m.className="rvw-msg"+(k?" "+k:"")}}
+function rvMine(){try{return JSON.parse(localStorage.getItem("rv_mine")||"[]")}catch(e){return[]}}
+function rvMineSave(a){try{localStorage.setItem("rv_mine",JSON.stringify(a.slice(-40)))}catch(e){}}
+function rvNewToken(){try{if(window.crypto&&crypto.randomUUID)return crypto.randomUUID()}catch(e){}var s="";for(var i=0;i<32;i++)s+=Math.floor(Math.random()*16).toString(16);return s}
+function rvHue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
+function rvToast(m){var e=document.getElementById("rv-toast");if(!e){e=document.createElement("div");e.id="rv-toast";e.className="adm-toast";document.body.appendChild(e)}e.textContent=m;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on")},2800)}
 function rvRender(){
+  var mine={};rvMine().forEach(function(m){mine[m.id]=1});
   var n=rvAll.length,avg=n?rvAll.reduce(function(s,x){return s+x.stars},0)/n:0;
   document.getElementById("rv-avg").innerHTML=n?avg.toFixed(1)+'<small> من '+RV_N+'</small>':"–";
   document.getElementById("rv-avgstars").innerHTML=rvStars(avg);
   document.getElementById("rv-cnt").textContent=n?(n+" تقييم"):"كن أول من يقيّم المجمع";
   document.getElementById("rv-list").innerHTML=rvAll.slice(0,rvShown).map(function(x,i){
-    return '<div class="rvw-item'+(x.id===rvNew?' new':'')+'" style="animation-delay:'+Math.min(i,6)*50+'ms"><div class="h"><div><b>'+esc(x.name||"زائر")+'</b> <small>'+esc(rvDate(x.created_at))+'</small></div>'+rvStars(x.stars)+'</div>'+(x.comment?'<p>'+esc(x.comment)+'</p>':'')+'</div>';
+    var nm=String(x.name||"زائر"),ch=Array.from(nm.trim())[0]||"ز",own=!!mine[x.id];
+    return '<div class="rvw-item'+(x.id===rvNew?' new':'')+(own?' mine':'')+'" style="animation-delay:'+Math.min(i,6)*50+'ms">'+
+      '<div class="top"><span class="av" style="--h:'+rvHue(nm)+'">'+esc(ch)+'</span><div class="who"><b>'+esc(nm)+'</b><small>'+esc(rvDate(x.created_at))+'</small></div>'+rvStars(x.stars)+'</div>'+
+      (x.comment?'<p>'+esc(x.comment)+'</p>':'')+
+      (own?'<div class="mine-row"><span class="rvw-badge">تقييمك</span><button type="button" class="rvw-del" data-del="'+esc(x.id)+'">🗑️ حذف تعليقي</button></div>':'')+
+    '</div>';
   }).join("")||'<div class="empty">لا توجد تقييمات بعد — كن أول من يشاركنا رأيه.</div>';
   document.getElementById("rv-more").hidden=rvAll.length<=rvShown;
 }
@@ -1004,25 +1031,43 @@ async function loadReviews(){
     rvTx.focus(); try{rvTx.setSelectionRange(rvTx.value.length,rvTx.value.length)}catch(err){}
   });
   document.getElementById("rv-send").addEventListener("click",async function(){
-    var btn=this,tx=rvTx,text=tx.value.trim().slice(0,300);
+    var btn=this,tx=rvTx,nm=document.getElementById("rv-name");
+    var text=tx.value.trim().slice(0,300),name=nm.value.trim().slice(0,30);
     if(!rvPick){rvMsg("اختر عدد النجوم أولًا ⭐","err");return}
-    if(rvBad(text)){
-      rvMsg("عذرًا، لا يمكن إرسال ملاحظة تحتوي على ألفاظ مسيئة. اكتب ملاحظتك بأدب 🌹","err");
-      tx.classList.remove("shake");void tx.offsetWidth;tx.classList.add("shake");
+    if(rvBad(name)||rvBad(text)){
+      rvMsg("عذرًا، لا يمكن إرسال ألفاظ مسيئة أو عنصرية. اكتب بأدب 🌹","err");
+      [nm,tx].forEach(function(x){x.classList.remove("shake");void x.offsetWidth;x.classList.add("shake")});
       return;
     }
-    if(/https?:|www\.|\.(com|net|org|info|ly|me)\b/i.test(text)){rvMsg("لا يمكن إضافة روابط في الملاحظة","err");return}
+    if(/https?:|www\.|\.(com|net|org|info|ly|me)\b/i.test(name+" "+text)){rvMsg("لا يمكن إضافة روابط في التقييم","err");return}
     var last=0;try{last=+localStorage.getItem("rv_t")||0}catch(e){}
     if(Date.now()-last<45000){rvMsg("انتظر قليلًا قبل إرسال تقييم آخر","err");return}
     btn.disabled=true; rvMsg("جارٍ الإرسال…");
-    var r=await sb.from("reviews").insert({name:"زائر",stars:rvPick,comment:text});
+    var tok=rvNewToken(),row={name:name||"زائر",stars:rvPick,comment:text,owner_token:tok};
+    var r=await sb.from("reviews").insert(row).select("id");
+    if(r.error&&/owner_token|schema cache|column/i.test((r.error.message||"")+" "+(r.error.code||""))){
+      delete row.owner_token; tok=null;
+      r=await sb.from("reviews").insert(row).select("id");
+    }
     btn.disabled=false;
     if(r.error){rvMsg("تعذّر إرسال التقييم الآن، حاول لاحقًا","err");return}
+    var nid=(r.data&&r.data[0])?r.data[0].id:null;
+    if(nid&&tok){var mm=rvMine();mm.push({id:nid,t:tok});rvMineSave(mm)}
     try{localStorage.setItem("rv_t",String(Date.now()))}catch(e){}
-    tx.value="";rvCount();rvPick=0;paint();rvChips.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});
+    nm.value="";tx.value="";rvCount();rvPick=0;paint();rvChips.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});
     rvMsg("شكرًا لك! ظهر تقييمك للجميع ✅","ok");
     await loadReviews();
-    var f=rvAll[0]; rvNew=(f&&Date.now()-new Date(f.created_at)<120000)?f.id:null; rvRender();
+    rvNew=nid; rvRender();
+  });
+  document.getElementById("rv-list").addEventListener("click",async function(e){
+    var b=e.target.closest(".rvw-del"); if(!b) return;
+    var id=+b.dataset.del,m=rvMine().filter(function(x){return +x.id===id})[0]; if(!m) return;
+    if(!confirm("هل تريد حذف تعليقك؟")) return;
+    b.disabled=true;
+    var r=await sb.rpc("delete_my_review",{p_id:id,p_token:m.t});
+    if(r.error||r.data===false){b.disabled=false;rvToast("تعذّر حذف التعليق الآن");return}
+    rvMineSave(rvMine().filter(function(x){return +x.id!==id}));
+    await loadReviews(); rvToast("تم حذف تعليقك ✅");
   });
   /* يحدّث التقييمات تلقائيًا كل 90 ثانية (فقط إذا تغيّرت) */
   setInterval(async function(){
