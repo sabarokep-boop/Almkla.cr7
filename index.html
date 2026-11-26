@@ -388,8 +388,8 @@ html.warm .rv{opacity:1!important;transform:none!important;transition:none!impor
 
 <div class="wrap">
   <div class="stats">
-    <div class="stat"><b>7</b><span>مراحل دراسية</span></div>
-    <div class="stat"><b>4</b><span>صفوف الأساسي</span></div>
+    <div class="stat"><b>6</b><span>مراحل دراسية</span></div>
+    <div class="stat"><b>3</b><span>صفوف الأساسي</span></div>
     <div class="stat"><b>3</b><span>صفوف الثانوي</span></div>
     <div class="stat"><b>2</b><span>مساران علمي وأدبي</span></div>
   </div>
@@ -523,7 +523,7 @@ var GRADES=[
    {title:"الأدب والنصوص والنقد",subject:"لغة عربية",sems:["s2-adab-1.pdf","s2-adab-2.pdf"]},
    {title:"القراءة",subject:"لغة عربية",sems:["s2-reading-1.pdf","s2-reading-2.pdf"]},
    {title:"النحو والصرف",subject:"لغة عربية",sems:["s2-nahw-1.pdf","s2-nahw-2.pdf"]},
-   {title:"الرياضيات",subject:"رياضيات",url:"s2-math.pdf"},
+   {title:"الرياضيات",subject:"رياضيات",sems:["s2-math-1.pdf","s2-math-2.pdf"],semLabels:["الجزء الأول","الجزء الثاني"]},
    {title:"الكيمياء",subject:"علوم",url:"s2-chem.pdf"},
    {title:"الفيزياء",subject:"علوم",url:"s2-physics.pdf"},
    {title:"الأحياء",subject:"علوم",url:"s2-biology.pdf"},
@@ -733,7 +733,7 @@ document.addEventListener("click",function(e){
 });
 /* ===== تحميل كتاب مقسّم إلى ملفين: يُحمَّل الجزءان معًا ويندمجان في ملف PDF واحد ===== */
 function dlLink(b){
-  if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=i?"الفصل الثاني":"الفصل الأول";return '<a href="#" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
+  if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=(b.semLabels&&b.semLabels[i])||(i?"الفصل الثاني":"الفصل الأول");return '<a href="#" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
   if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
   return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'';
 }
