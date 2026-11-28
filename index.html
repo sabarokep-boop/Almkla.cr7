@@ -750,9 +750,9 @@ document.addEventListener("click",function(e){
 });
 /* ===== تحميل كتاب مقسّم إلى ملفين: يُحمَّل الجزءان معًا ويندمجان في ملف PDF واحد ===== */
 function dlLink(b){
-  if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=(b.semLabels&&b.semLabels[i])||(i?"الفصل الثاني":"الفصل الأول");return '<a href="#" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
+  if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=(b.semLabels&&b.semLabels[i])||(i?"الفصل الثاني":"الفصل الأول");return '<a href="'+esc(u)+'" download="'+esc(b.title+" - "+n+".pdf")+'" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
   if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
-  return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'<span style="color:var(--mute);font-size:14px">سيُضاف قريبًا</span>';
+  return b.url?'<a href="'+esc(b.url)+'" download="'+esc(b.title+".pdf")+'" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'<span style="color:var(--mute);font-size:14px">سيُضاف قريبًا</span>';
 }
 /* ===== مدير التحميل: يستمر حتى لو انتقل الزائر بين الصفوف، ويعيده لمكان الكتب ===== */
 var DL={};
@@ -809,7 +809,8 @@ function dlStart(a){
     dlFinish(key,"done");
   }).catch(function(){dlFinish(key,"err")});
 }
-document.addEventListener("click",function(e){var a=e.target.closest("a.dlp");if(!a)return;e.preventDefault();dlStart(a)});
+function dlNative(a){var l=a.getAttribute("data-label")||"تحميل الكتاب";a.textContent="بدأ التحميل ✓";a.classList.add("done");clearTimeout(a._t);a._t=setTimeout(function(){a.textContent=l;a.classList.remove("done")},2500)}
+document.addEventListener("click",function(e){var a=e.target.closest("a.dlp");if(!a)return;if(a.getAttribute("data-parts").indexOf("|")<0){dlNative(a);return}e.preventDefault();dlStart(a)});
 render=(function(r){return function(){r.apply(this,arguments);dlPaintAll()}})(render);
 /* بعد فتح الكتاب في آيفون: يرجع الزائر إلى نفس الصف ونفس مكان الكتب بدل أعلى الصفحة */
 var rbSt=null;
