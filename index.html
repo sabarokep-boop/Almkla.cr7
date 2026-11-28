@@ -750,9 +750,9 @@ document.addEventListener("click",function(e){
 });
 /* ===== تحميل كتاب مقسّم إلى ملفين: يُحمَّل الجزءان معًا ويندمجان في ملف PDF واحد ===== */
 function dlLink(b){
-  if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=(b.semLabels&&b.semLabels[i])||(i?"الفصل الثاني":"الفصل الأول");return '<a href="'+esc(u)+'" download="'+esc(b.title+" - "+n+".pdf")+'" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
+  if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=(b.semLabels&&b.semLabels[i])||(i?"الفصل الثاني":"الفصل الأول");return '<a href="#" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
   if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
-  return b.url?'<a href="'+esc(b.url)+'" download="'+esc(b.title+".pdf")+'" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'<span style="color:var(--mute);font-size:14px">سيُضاف قريبًا</span>';
+  return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'<span style="color:var(--mute);font-size:14px">سيُضاف قريبًا</span>';
 }
 /* ===== مدير التحميل: يستمر حتى لو انتقل الزائر بين الصفوف، ويعيده لمكان الكتب ===== */
 var DL={};
@@ -763,8 +763,8 @@ function dlPaint(a){
   var s=DL[dlKey(a)],label=a.getAttribute("data-label")||"تحميل الكتاب";
   if(!s){ if(a.getAttribute("aria-busy")==="true"){a.removeAttribute("aria-busy");a.style.pointerEvents="";a.classList.remove("done");a.style.removeProperty("--p");a.textContent=label} return }
   a.setAttribute("aria-busy","true");a.style.pointerEvents="none";
-  if(s.st==="run"){a.style.setProperty("--p",s.p+"%");a.textContent=s.est?"جارٍ التحميل · متبقي "+s.left+" ث":(s.p?"جارٍ التحميل "+s.p+"%":"جارٍ التحميل...")}
-  else{a.style.removeProperty("--p");a.textContent=s.st==="done"?(s.est?"اكتمل ✓ شوف التنزيلات":"تم التحميل ✓"):"تعذّر التحميل، حاول مرة ثانية";a.classList.toggle("done",s.st==="done")}
+  if(s.st==="run"){a.style.setProperty("--p",s.p+"%");a.textContent=s.p?"جارٍ التحميل "+s.p+"%":"جارٍ التحميل..."}
+  else{a.style.removeProperty("--p");a.textContent=s.st==="done"?"تم التحميل ✓":"تعذّر التحميل، حاول مرة ثانية";a.classList.toggle("done",s.st==="done")}
 }
 var dlPillEl=null;
 function dlPill(){
@@ -781,7 +781,7 @@ function dlPill(){
     bar.style.width=p+"%";dlPillEl.className="dlpill on";
   }else{
     var last=DL[keys[keys.length-1]];
-    t.textContent=(last.st==="done"?(last.est?"✓ اكتمل تحميل «":"✓ تم تحميل «"):"تعذّر تحميل «")+dlShort(last.name)+"»";
+    t.textContent=(last.st==="done"?"✓ تم تحميل «":"تعذّر تحميل «")+dlShort(last.name)+"»";
     bar.style.width=last.st==="done"?"100%":"0%";dlPillEl.className="dlpill on "+(last.st==="done"?"ok":"err");
   }
 }
@@ -809,27 +809,7 @@ function dlStart(a){
     dlFinish(key,"done");
   }).catch(function(){dlFinish(key,"err")});
 }
-function dlEstimate(a,s){
-  var u=a.getAttribute("data-parts"),mb=(navigator.connection&&navigator.connection.downlink)||2;
-  mb=Math.max(0.5,Math.min(mb,8));
-  function go(bytes){
-    var sec=(bytes||12000000)/(mb*125000);
-    s.dur=Math.max(4,Math.min(150,Math.round(sec)))*1000;
-  }
-  s.dur=10000;
-  try{fetch(u,{method:"HEAD"}).then(function(r){go(+r.headers.get("content-length")||0)}).catch(function(){go(0)})}catch(e){go(0)}
-}
-function dlNative(a){
-  var key=dlKey(a);if(DL[key]&&DL[key].st==="run")return;
-  var s=DL[key]={st:"run",p:0,est:true,left:10,name:a.getAttribute("data-name"),t0:Date.now(),dur:10000,got:[0],tot:[0]};
-  dlEstimate(a,s);dlPaintAll();
-  s.timer=setInterval(function(){
-    var el=Date.now()-s.t0;
-    if(el>=s.dur){clearInterval(s.timer);s.p=100;dlFinish(key,"done");return}
-    s.p=Math.min(99,Math.round(el/s.dur*100));s.left=Math.max(1,Math.ceil((s.dur-el)/1000));dlPaintAll();
-  },500);
-}
-document.addEventListener("click",function(e){var a=e.target.closest("a.dlp");if(!a)return;if(a.getAttribute("data-parts").indexOf("|")<0){dlNative(a);return}e.preventDefault();dlStart(a)});
+document.addEventListener("click",function(e){var a=e.target.closest("a.dlp");if(!a)return;e.preventDefault();dlStart(a)});
 render=(function(r){return function(){r.apply(this,arguments);dlPaintAll()}})(render);
 /* بعد فتح الكتاب في آيفون: يرجع الزائر إلى نفس الصف ونفس مكان الكتب بدل أعلى الصفحة */
 var rbSt=null;
