@@ -514,7 +514,24 @@ var GRADES=[
  {id:"g7",name:"الصف السابع",stage:"mid",books:[]},
  {id:"g8",name:"الصف الثامن",stage:"mid",books:[]},
  {id:"g9",name:"الصف التاسع",stage:"mid",books:[]},
- {id:"s1",name:"الأول الثانوي",stage:"sec",books:[]},
+ {id:"s1",name:"الأول الثانوي",stage:"sec",books:[
+  {title:"القرآن الكريم وعلومه",subject:"علوم إسلامية",url:"s1-quran.pdf"},
+  {title:"إيمان",subject:"علوم إسلامية",url:"s1-iman.pdf"},
+  {title:"الفقه والحديث",subject:"علوم إسلامية",url:"s1-hadith.pdf"},
+  {title:"السيرة النبوية",subject:"علوم إسلامية",url:"s1-sira.pdf"},
+  {title:"الأدب والنصوص والنقد",subject:"لغة عربية",sems:["s1-adab-1.pdf","s1-adab-2.pdf"],semLabels:["الجزء الأول","الجزء الثاني"]},
+  {title:"القراءة",subject:"لغة عربية",sems:["s1-reading-1.pdf","s1-reading-2.pdf"],semLabels:["الجزء الأول","الجزء الثاني"]},
+  {title:"النحو والصرف",subject:"لغة عربية",sems:["s1-nahw-1.pdf","s1-nahw-2.pdf"],semLabels:["الجزء الأول","الجزء الثاني"]},
+  {title:"الرياضيات",subject:"رياضيات",sems:["s1-math-1.pdf","s1-math-2.pdf"],semLabels:["الجزء الأول","الجزء الثاني"]},
+  {title:"الكيمياء",subject:"علوم",url:"s1-chem.pdf"},
+  {title:"الفيزياء",subject:"علوم",url:"s1-physics.pdf"},
+  {title:"الأحياء",subject:"علوم",url:"s1-biology.pdf"},
+  {title:"التاريخ",subject:"تاريخ",sems:["s1-history-1.pdf","s1-history-2.pdf"],semLabels:["الجزء الأول","الجزء الثاني"]},
+  {title:"المجتمع اليمني",subject:"اجتماعيات",url:"s1-society.pdf"},
+  {title:"الجغرافيا",subject:"جغرافيا",url:"s1-geography.pdf"},
+  {title:"English – Pupil’s Book",subject:"اللغة الإنجليزية (الدروس)",url:"s1-eng-pupil.pdf"},
+  {title:"English – Workbook",subject:"اللغة الإنجليزية (التمارين)",url:"s1-eng-workbook.pdf"}
+ ]},
  {id:"s2",name:"الثاني الثانوي",stage:"sec",tracks:{"علمي":[
    {title:"القرآن الكريم",subject:"علوم إسلامية",url:"s2-quran.pdf"},
    {title:"إيمان",subject:"علوم إسلامية",url:"s2-iman.pdf"},
@@ -579,7 +596,7 @@ function render(){
   ["mid","sec"].forEach(function(st){
     var h="";
     GRADES.filter(function(g){return g.stage===st}).forEach(function(g){
-      h+='<button class="gbtn'+(g.id===cur?' on':'')+'" data-id="'+g.id+'">'+g.name+'<small>'+(g.tracks?'علمي وأدبي':g.books.length+' كتب')+'</small></button>';
+      h+='<button class="gbtn'+(g.id===cur?' on':'')+'" data-id="'+g.id+'">'+g.name+'<small>'+(g.tracks?'علمي وأدبي':g.books.filter(function(b){return b.url||b.sems||b.parts}).length+' كتب')+'</small></button>';
     });
     document.getElementById(st==="mid"?"g-mid":"g-sec").innerHTML=h;
   });
@@ -735,7 +752,7 @@ document.addEventListener("click",function(e){
 function dlLink(b){
   if(b.sems)return '<div class="sems">'+b.sems.map(function(u,i){var n=(b.semLabels&&b.semLabels[i])||(i?"الفصل الثاني":"الفصل الأول");return '<a href="#" class="dlp" data-parts="'+esc(u)+'" data-name="'+esc(b.title+" - "+n+".pdf")+'" data-label="'+n+'">'+n+'</a>'}).join("")+'</div>';
   if(b.parts)return '<a href="#" class="dlp" data-parts="'+esc(b.parts.join("|"))+'" data-name="'+esc(b.fname||b.title+".pdf")+'">تحميل الكتاب</a>';
-  return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'';
+  return b.url?'<a href="#" class="dlp" data-parts="'+esc(b.url)+'" data-name="'+esc(b.title+".pdf")+'">تحميل الكتاب</a>':'<span style="color:var(--mute);font-size:14px">سيُضاف قريبًا</span>';
 }
 /* ===== مدير التحميل: يستمر حتى لو انتقل الزائر بين الصفوف، ويعيده لمكان الكتب ===== */
 var DL={};
